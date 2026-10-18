@@ -1,0 +1,5 @@
+---
+import {faqs} from '../data/faq';
+import Icon from './Icon.astro';
+---
+<div class="faq-list">{faqs.map(({q,a})=><details><summary>{q}<Icon name="plus" size={20}/></summary><p>{a}</p></details>)}</div>

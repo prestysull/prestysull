@@ -1,0 +1,5 @@
+---
+import {testimonials} from '../data/testimonios';
+import Icon from './Icon.astro';
+---
+{import.meta.env.DEV && <section class="section demo-section" aria-label="Demostración de testimonios"><div class="container"><p class="eyebrow">Demostración · Oculto en producción</p><div class="section-heading"><h2>Un espacio para<br/>historias reales.</h2><div class="carousel-controls"><button aria-label="Testimonio anterior" data-carousel-prev><Icon name="arrow"/></button><button aria-label="Testimonio siguiente" data-carousel-next><Icon name="arrow"/></button></div></div><div class="testimonials" tabindex="0" aria-label="Ejemplos de testimonios; usa las flechas o desplázate">{testimonials.map(t=><article><span class="quote-mark" aria-hidden="true">“</span><p>{t.text}</p><b>{t.label}</b><small>Contenido de demostración · Sin cliente atribuido</small></article>)}</div></div></section>}

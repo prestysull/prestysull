@@ -1,0 +1,6 @@
+---
+import Layout from '../layouts/Layout.astro';
+import {pathUrl} from '../lib/links';
+import Icon from '../components/Icon.astro';
+---
+<Layout title="Página no encontrada" description="Esta página no está disponible. Vuelve al inicio de Prestysull." noindex><section class="container not-found"><span class="error-code">404</span><p class="eyebrow">Este camino no lleva a una página</p><h1>Volvamos a dar<br/>el siguiente paso.</h1><p>Es posible que el enlace haya cambiado o que la dirección no exista.</p><a class="button primary" href={pathUrl()}>Volver al inicio <Icon name="arrow"/></a></section></Layout>

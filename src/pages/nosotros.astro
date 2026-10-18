@@ -1,0 +1,9 @@
+---
+import Layout from '../layouts/Layout.astro';
+import {Image} from 'astro:assets';
+import {images} from '../data/imagenes';
+const photo=images.commerce;
+import {company} from '../data/empresa';
+import ContactBand from '../components/ContactBand.astro';
+---
+<Layout title="Conoce Prestysull en Sullana" description="Prestysull opera en Sullana, Piura, con préstamos semanales y catorcenales sujetos a evaluación. Conoce nuestra atención local."><section class="container page-intro"><p class="eyebrow">Hola, somos Prestysull</p><h1>El impulso de<br/><span>todos los días.</span></h1><p>{company.about}</p></section><section class="container section section-topless about-page"><Image src={photo} alt="Comerciante ficticia en una escena ilustrativa creada con IA" widths={[600,1000,1400]} sizes="(max-width: 760px) 100vw, 80vw" format="webp" loading="eager"/><p class="small">Imagen ilustrativa generada con IA. No representa a una cliente ni a una oficina real de Prestysull.</p><div class="section-heading"><h2>Una conversación.<br/>Un próximo paso.</h2><p>Atendemos consultas de comerciantes, emprendedores y trabajadores dependientes de todo Sullana. La propuesta de préstamo considera una evaluación de la capacidad real de pago.</p></div>{import.meta.env.DEV && <div class="institution-demo"><p class="draft-note">Demostración editorial · Oculta en producción · Requiere aprobación de Prestysull.</p><div class="institution-grid">{company.demo.map(d=><article><h3>{d.title}</h3><p>{d.text}</p></article>)}</div></div>}</section><ContactBand/></Layout>
