@@ -1,0 +1,16 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
+import WhatsApp from '../../components/WhatsApp.astro';
+import ContactBand from '../../components/ContactBand.astro';
+import {loans,type LoanMode} from '../../data/prestamos';
+import {pathUrl} from '../../lib/links';
+export function getStaticPaths(){return Object.keys(loans).map(modalidad=>({params:{modalidad}}));}
+const mode=Astro.params.modalidad as LoanMode;
+const loan=loans[mode];
+---
+<Layout title={`${loan.name} en Sullana`} description={`${loan.audience}. Pagos cada ${loan.days} días, hasta ${loan.maxInstallments} cuotas. Revisa requisitos y consulta por WhatsApp.`}>
+<section class="container page-intro detail-intro"><a class="back-link" href={pathUrl('prestamos/')}>← Todas las modalidades</a><p class="eyebrow">{loan.audience}</p><div class="detail-heading"><div><h1>{loan.title}</h1><p>{loan.description}</p><WhatsApp context={mode}/></div><div class="period-card"><Icon name={loan.icon} size={54}/><span>Pagos cada</span><strong>{loan.days}<small>días</small></strong><span>Hasta {loan.maxInstallments} cuotas</span></div></div></section>
+<section class="container section section-topless requirements-grid"><div><p class="eyebrow">Para iniciar tu evaluación</p><h2>Ten a mano<br/>estos documentos.</h2><p>Estos son los requisitos confirmados para la modalidad {mode}.</p><a class="text-link" href={pathUrl(`simulador/?modalidad=${mode}`)}>Simular esta modalidad <Icon name="arrow"/></a></div><div class="requirements">{loan.requirements.map((r,i)=><div><span>{String(i+1).padStart(2,'0')}</span><h3>{r}</h3><Icon name="check"/></div>)}<p class="small">Presentar los requisitos no garantiza la aprobación del préstamo.</p></div></section>
+<section class="pale-section section"><div class="container conditions-grid"><div><p class="eyebrow">Antes de decidir</p><h2>Condiciones claras.</h2></div><div><p>El capital mínimo es S/ 500. El monto, la tasa y el plazo de la propuesta se determinan después de evaluar tu capacidad real de pago.</p><p>La tasa se aplica una sola vez sobre el capital para toda la operación. El simulador considera un seguro del 1% del capital; su información y condiciones contractuales están pendientes de revisión antes de publicar.</p><p>El mínimo de cuotas y la política de sábados aún deben confirmarse. Si el préstamo se aprueba, la formalización y firma del desembolso se realizan en oficina.</p></div></div></section><ContactBand/>
+</Layout>

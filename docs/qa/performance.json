@@ -1,0 +1,14 @@
+{
+  "note": "Medición local en Edge automatizado, sin emular red lenta ni dispositivo físico. No es una puntuación Lighthouse ni garantía de FPS.",
+  "viewport": "1440x1000",
+  "frames": 120,
+  "medianFrameMs": 16.699999999999818,
+  "p95FrameMs": 49.80000000000018,
+  "longTasksDuringScroll": [
+    50,
+    125
+  ],
+  "loadedBytes": 239131,
+  "scriptBytes": 2702,
+  "resources": 6
+}

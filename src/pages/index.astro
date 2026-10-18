@@ -1,0 +1,44 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import {images} from '../data/imagenes';
+const photo=images.commerce;
+import Icon from '../components/Icon.astro';
+import WhatsApp from '../components/WhatsApp.astro';
+import LoanCards from '../components/LoanCards.astro';
+import FAQ from '../components/FAQ.astro';
+import ContactBand from '../components/ContactBand.astro';
+import Testimonials from '../components/Testimonials.astro';
+import {company} from '../data/empresa';
+import {processSteps} from '../data/prestamos';
+import {simulator} from '../data/simulador';
+import {formatMoney,simulate} from '../lib/finance';
+import {pathUrl} from '../lib/links';
+const example=simulate(simulator.defaultCapital,simulator.defaultRate,simulator.defaultCount,'semanal');
+---
+<Layout title="Préstamos en Sullana para tu siguiente paso" description="Conoce los préstamos semanales y catorcenales de Prestysull en Sullana. Revisa requisitos, simula tus cuotas y consulta por WhatsApp.">
+  <section class="hero container">
+    <div class="hero-copy">
+      <p class="eyebrow enter"><span class="status-dot"></span> Préstamos en Sullana, Piura</p>
+      <h1 class="enter" style="--order:1">{company.heroLines.map((line,i)=>i===company.heroLines.length-1?<span>{line}</span>:<>{line}<br/></>)}<svg class="headline-stroke" viewBox="0 0 430 20" aria-hidden="true"><path d="M3 12Q195-4 425 9"/></svg></h1>
+      <p class="hero-description enter" style="--order:2">{company.intro}</p>
+      <div class="hero-actions enter" style="--order:3"><WhatsApp/><a class="text-link" href={pathUrl('simulador/')}>Simular mi préstamo <Icon name="arrow" size={19}/></a></div>
+      <p class="hero-footnote enter" style="--order:4"><Icon name="shield" size={17}/> Atención humana. Financiamiento sujeto a evaluación.</p>
+    </div>
+    <div class="hero-visual enter" style="--order:2">
+      <div class="hero-shape" aria-hidden="true"></div><div class="orbit orbit-one" aria-hidden="true" data-parallax="0.045"></div>
+      <figure class="hero-photo"><Image src={photo} alt={images.commerceAlt} widths={[480,800,1200]} sizes="(max-width: 760px) 100vw, 48vw" format="webp" quality={82} loading="eager" fetchpriority="high"/><figcaption>{images.caption}</figcaption></figure>
+      <div class="photo-sticker" data-parallax="-0.025"><span class="sticker-icon"><Icon name="store" size={26}/></span><div><b>Tu trabajo, tu impulso.</b><small>Nosotros, cerca de ti.</small></div></div>
+      <div class="round-sticker" aria-hidden="true"><Icon name="up" size={45}/></div>
+      <span class="photo-location"><Icon name="pin" size={15}/> Pensado para Sullana</span>
+    </div>
+  </section>
+  <div class="local-strip"><div class="container"><span><Icon name="pin"/> Cobertura en todo Sullana</span><span><Icon name="chat"/> Consulta directa por WhatsApp</span><span><Icon name="document"/> Formalización en oficina</span></div></div>
+  <section class="section container" id="modalidades"><div class="section-heading reveal"><div><p class="eyebrow">Un paso que va contigo</p><h2>Diferentes rutinas.<br/><span>Una misma forma de avanzar.</span></h2></div><p>Elige la modalidad que corresponde a tu actividad. Conoce los requisitos y conversemos.</p></div><LoanCards/><p class="section-footnote">El monto, la tasa y el plazo se determinan según evaluación. El mínimo de cuotas está pendiente de confirmación.</p></section>
+  <section class="process-section section" id="como-funciona"><div class="container process-grid"><div class="process-sticky"><p class="eyebrow">Así damos el siguiente paso</p><h2>Primero te<br/>escuchamos.<br/><span>Después, evaluamos.</span></h2><p>Un proceso que toma en cuenta tu capacidad real de pago.</p><div class="process-art" aria-hidden="true"><div class="process-orbit"></div><span class="process-art-icon"><Icon name="chat" size={54}/></span><span class="process-counter"><b data-step-number>01</b><span>/ 06</span></span><p data-step-title>{processSteps[0].title}</p><div class="step-progress"><span></span></div></div><span class="small">La consulta no garantiza la aprobación.</span></div><ol class="process-steps">{processSteps.map((step,i)=><li data-step={i} class:list={[i===0&&'is-active']}><span class="step-num">{String(i+1).padStart(2,'0')}</span><div><span class="step-symbol"><Icon name={step.icon}/></span><h3>{step.title}</h3><p>{step.text}</p></div></li>)}</ol></div></section>
+  <section class="section container simulator-preview"><div class="reveal"><p class="eyebrow">Haz números, con calma</p><h2>Tu próximo paso,<br/><span>más claro.</span></h2><p>Explora un monto, compara escenarios y conoce cómo se compone una cuota antes de conversar con un asesor.</p><a href={pathUrl('simulador/')} class="button primary">Ir al simulador <Icon name="arrow" size={20}/></a><p class="small">Sin registros. El cálculo se realiza en tu dispositivo.</p></div><div class="preview-card reveal"><div class="card-top"><span class="eyebrow">Ejemplo referencial · Semanal</span><Icon name="sliders"/></div><div class="preview-amount"><span>Si simulas</span><b>{formatMoney(example.capital)}</b></div><div class="preview-line"><span>Tasa de la operación</span><b>{simulator.defaultRate}%</b></div><div class="preview-line"><span>Seguro ({simulator.insurancePercent}% del capital)</span><b>{formatMoney(example.insurance)}</b></div><div class="preview-result"><span>En {simulator.defaultCount} cuotas de</span><strong>{formatMoney(example.installments[0])}</strong><span>Total a pagar: {formatMoney(example.total)}</span></div><p class="small">{simulator.warning}</p></div></section>
+  <section class="about-section"><div class="container about-grid"><div class="about-photo"><Image src={photo} alt="Escena ilustrativa de comercio local, creada con IA" widths={[480,800]} sizes="(max-width: 760px) 100vw, 44vw" format="webp" quality={80} loading="lazy"/><span class="about-photo-label">El valor de lo que haces, cada día.</span></div><div class="about-copy reveal"><p class="eyebrow">Hola, somos Prestysull</p><h2>{company.localTitle}</h2><p>{company.about}</p><a class="text-link" href={pathUrl('nosotros/')}>Conoce Prestysull <Icon name="arrow"/></a>{import.meta.env.DEV && <p class="draft-note">Contenido institucional ampliado pendiente de revisión. Los borradores se muestran solo en desarrollo.</p>}</div></div></section>
+  <Testimonials/>
+  <section class="section container faq-section" id="preguntas"><div class="reveal"><p class="eyebrow">Hablemos claro</p><h2>Es normal<br/>tener preguntas.</h2><p>Estas respuestas te ayudan a dar el primer paso.</p><a class="text-link" href={pathUrl('contacto/')}>Estamos para orientarte <Icon name="arrow" size={20}/></a></div><FAQ/></section>
+  <ContactBand/>
+</Layout>
