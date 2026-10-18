@@ -6,6 +6,5 @@ export const simulator = {
   saturdayIsBusinessDay: null as boolean | null,
   localHolidays: [] as string[],
   warning: 'Simulación referencial. Los montos, tasas, plazos y condiciones finales están sujetos a evaluación y aprobación de Prestysull.',
-  installmentNotice: 'El mínimo de cuotas está pendiente de confirmación. Las opciones son escenarios de cálculo, no plazos comerciales aprobados.',
-  calendarNotice: 'Fechas referenciales: se cuentan intervalos desde el desembolso y se traslada cada vencimiento no hábil. Falta confirmar si un traslado modifica las cuotas siguientes y la política de sábados.',
+  calendarNotice: 'Cronograma referencial sujeto a confirmación con un asesor.',
 };

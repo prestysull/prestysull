@@ -30,23 +30,16 @@ if(form){
     try{
       const r=simulate(capital.value,Number(rate.value),Number(count.value),mode());
       const rows=buildSchedule(date.value,r.installments.length,mode(),simulator.saturdayIsBusinessDay,simulator.localHolidays);
+      document.querySelector<HTMLElement>('#schedule-disbursement')!.textContent=formatDate(date.value);
       set('installment',formatMoney(r.installments[0]));
       set('frequency',`${count.value} cuotas · cada ${loans[mode()].days} días`);
       for(const key of ['capital','interest','insurance','total'] as const) set(key,formatMoney(r[key]));
-      set('rounding',`Última cuota: ${formatMoney(r.installments.at(-1)!)}. El interés corresponde a toda la operación.`);
       set('schedule-total',formatMoney(r.total));
       tbody.replaceChildren(...rows.map((row,i)=>{
         const tr=document.createElement('tr');
-        let adjusted='Calendario pendiente de revisión';
-        if(row.saturdayOpen&&row.saturdayClosed){
-          adjusted=row.saturdayOpen===row.saturdayClosed?formatDate(row.saturdayOpen):`${formatDate(row.saturdayOpen)} si sábado hábil / ${formatDate(row.saturdayClosed)} si no hábil`;
-        }
-        const cells=[String(i+1).padStart(2,'0'),formatDate(row.base),adjusted,formatMoney(r.installments[i])];
+        const cells=[String(i+1).padStart(2,'0'),formatDate(row.base),formatMoney(r.installments[i])];
         cells.forEach((text,j)=>{const cell=document.createElement(j===0?'th':'td');if(j===0)cell.setAttribute('scope','row');cell.textContent=text;tr.append(cell);});return tr;
       }));
-      const unknown=rows.some(row=>!row.saturdayOpen||!row.saturdayClosed);
-      const ambiguous=rows.some(row=>row.saturdayOpen!==row.saturdayClosed);
-      document.querySelector<HTMLElement>('#calendar-notice')!.textContent=unknown?'Parte del cronograma cae fuera del calendario nacional revisado. Se muestran fechas base, pero sus ajustes quedan pendientes. Confirma el cronograma con un asesor.':ambiguous?'La política de sábados está pendiente. Donde cambia el resultado, se muestran las alternativas de sábado hábil y no hábil. Confirma las fechas con un asesor.':'Se trasladan domingos y feriados nacionales configurados. Este cronograma es referencial; confirma la política de días hábiles con un asesor.';
       result.hidden=false;scheduleSection.hidden=false;
       status.textContent=`Cálculo actualizado: ${count.value} cuotas. Cuota base ${formatMoney(r.installments[0])}.`;
       status.classList.add('sr-only');

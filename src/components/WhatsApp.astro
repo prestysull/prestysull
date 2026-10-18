@@ -5,4 +5,4 @@ import type { messages } from '../data/contacto';
 interface Props { context?: keyof typeof messages; label?: string; variant?: string; }
 const {context='general',label='Conversemos por WhatsApp',variant='primary'}=Astro.props;
 ---
-<a class:list={['button',variant]} href={whatsapp(context)} target="_blank" rel="noopener noreferrer"><Icon name="chat" size={20}/><span>{label}</span><Icon name="up" size={18}/></a>
+<a class:list={['button',variant]} href={whatsapp(context)} target="_blank" rel="noopener noreferrer"><span class="whatsapp-icon"><Icon name="chat" size={20}/></span><span>{label}</span><Icon name="up" size={18}/></a>

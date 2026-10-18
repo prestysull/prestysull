@@ -30,3 +30,14 @@
  @media(max-width:380px){.container{width:calc(100% - 32px)}.nav-wrap{gap:10px}.brand{width:75px}.nav-button{padding:9px 13px}.hero h1{font-size:43px}.hero .eyebrow{font-size:8px}.hero-visual{height:360px}.hero-actions{flex-direction:column;align-items:stretch;gap:10px}.hero-actions .text-link{justify-content:center}.hero-footnote{font-size:8px;gap:5px}.loan-card{padding:23px}.loan-card h3{font-size:27px}.card-actions{flex-wrap:wrap;gap:10px}.section-heading h2{font-size:31px}.contact-inner h2{font-size:32px}.calculator-form{padding:23px 18px}.calculator-output{padding:27px 21px}.mode-picker label>span{padding:12px}.mode-picker label b{font-size:12px}.field-pair{grid-template-columns:1fr;gap:18px}.period-card strong{font-size:52px}.detail-heading h1{font-size:37px}}
  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.will-reveal{opacity:1;transform:none}.hero-shape{transform:none}.button:hover,.loan-card:hover,.floating-wa:hover,.text-link:hover svg{transform:none}[data-parallax]{transform:none!important}}
 }
+/* WhatsApp marks retain their familiar service color. */
+.whatsapp-icon{display:inline-flex;color:#25D366}
+.floating-wa .whatsapp-icon{color:#25D366}
+/* A custom, Prestysull-colored map pin. */
+.map-pin{border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 8px 20px #102a4c35}
+.map-pin svg{transform:rotate(45deg)}
+.policy-page{max-width:900px}
+.policy-page h2{font-size:22px;margin-top:38px;margin-bottom:12px}
+.policy-page p{font-size:15px;line-height:1.8;color:var(--muted);margin-top:12px}
+.policy-page .small{font-size:12px}
+.policy-page a{color:var(--blue);text-decoration:underline;text-underline-offset:3px}
