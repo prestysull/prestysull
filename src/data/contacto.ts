@@ -1,5 +1,5 @@
 export const contact = {
-  phone: '+51 945 396 704', whatsapp: '51945396704',
+  phone: '945 396 704', whatsapp: '51945396704',
   address: 'San Martín 1094, Sullana', street: 'San Martín 1094', locality: 'Sullana', region: 'Piura', country: 'PE', city: 'Sullana, Piura, Perú', coverage: 'Todo Sullana',
   hours: '9:00 a. m. a 1:00 p. m.', days: 'Lunes a sábados',
   facebook: 'https://www.facebook.com/share/1MEHAAR6az/', tiktok: 'https://www.tiktok.com/@prestysull?_r=1&_t=ZS-9AfIwpvrm9I',
