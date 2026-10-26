@@ -101,6 +101,24 @@ test('el hero pausa la rotación cuando la pestaña está oculta',async({page})=
   await page.waitForTimeout(5800);
   await expect(gallery).toHaveAttribute('data-active-slide','1');
 });
+test('las tarjetas y el proceso tienen movimiento editorial',async({page})=>{
+  await page.setViewportSize({width:1440,height:900});
+  await page.goto('/');
+  const cards=page.locator('[data-loan-card]');
+  await expect(cards).toHaveCount(2);
+  await expect(cards.locator('[data-card-timeline]')).toHaveCount(2);
+  await expect(cards.nth(0).locator('[data-card-timeline]')).toContainText('7 días');
+  await expect(cards.nth(1).locator('[data-card-timeline]')).toContainText('14 días');
+  const process=page.locator('.process-art');
+  await expect(process.locator('[data-process-scene]')).toHaveCount(6);
+  await expect(process.locator('[data-process-scene]').first().locator('.whatsapp-mark')).toBeVisible();
+  await page.locator('[data-step="4"]').evaluate(element=>element.scrollIntoView({block:'center'}));
+  await expect(process).toHaveAttribute('data-scene','4');
+  await page.setViewportSize({width:320,height:800});
+  await page.reload();
+  await expect(page.locator('.process-art')).toBeVisible();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBeTruthy();
+});
 test('accesibilidad automática WCAG en las rutas',async({page})=>{
   test.setTimeout(120000);
   for(const route of routes){await page.goto(route);await page.emulateMedia({reducedMotion:'reduce'});const report=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();expect(report.violations,JSON.stringify(report.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)})))).toEqual([]);}

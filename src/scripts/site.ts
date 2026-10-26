@@ -49,14 +49,28 @@ if(!motion.matches){
 }
 const steps=document.querySelectorAll<HTMLElement>('[data-step]');
 if(steps.length){
-  const observer=new IntersectionObserver(entries=>{entries.filter(e=>e.isIntersecting).forEach(entry=>{
-    steps.forEach(step=>step.classList.toggle('is-active',step===entry.target));
-    const i=Number((entry.target as HTMLElement).dataset.step);
+  const processArt=document.querySelector<HTMLElement>('.process-art')!;
+  const scenes=Array.from(document.querySelectorAll<HTMLElement>('[data-process-scene]'));
+  const visibleSteps=new Set<HTMLElement>();
+  const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting)visibleSteps.add(entry.target as HTMLElement);else visibleSteps.delete(entry.target as HTMLElement);});
+    const entry=Array.from(visibleSteps).sort((a,b)=>Math.abs(a.getBoundingClientRect().top+a.offsetHeight/2-innerHeight*.45)-Math.abs(b.getBoundingClientRect().top+b.offsetHeight/2-innerHeight*.45))[0];
+    if(entry){
+    steps.forEach(step=>step.classList.toggle('is-active',step===entry));
+    const i=Number(entry.dataset.step);
+    processArt.dataset.scene=String(i);
+    scenes.forEach((scene,index)=>scene.classList.toggle('is-active',index===i));
     document.querySelector('[data-step-number]')!.textContent=String(i+1).padStart(2,'0');
-    document.querySelector('[data-step-title]')!.textContent=entry.target.querySelector('h3')!.textContent;
+    document.querySelector('[data-step-title]')!.textContent=entry.querySelector('h3')!.textContent;
     (document.querySelector('.step-progress span') as HTMLElement).style.width=`${(i+1)/steps.length*100}%`;
-  });},{rootMargin:'-25% 0px -35% 0px'});
+    }
+  },{rootMargin:'-25% 0px -35% 0px'});
   steps.forEach(step=>observer.observe(step));
+}
+if(matchMedia('(hover:hover) and (pointer:fine)').matches){
+  document.querySelectorAll<HTMLElement>('[data-loan-card]').forEach(card=>{
+    card.addEventListener('pointermove',event=>{const box=card.getBoundingClientRect();card.style.setProperty('--mx',`${event.clientX-box.left}px`);card.style.setProperty('--my',`${event.clientY-box.top}px`);});
+    card.addEventListener('pointerleave',()=>{card.style.removeProperty('--mx');card.style.removeProperty('--my');});
+  });
 }
 const carousel=document.querySelector<HTMLElement>('.testimonials');
 if(carousel){
