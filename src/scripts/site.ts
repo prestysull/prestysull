@@ -10,6 +10,34 @@ if(toggle&&nav){
   matchMedia('(min-width: 901px)').addEventListener('change',close);
 }
 const motion=matchMedia('(prefers-reduced-motion: reduce)');
+const heroGallery=document.querySelector<HTMLElement>('[data-hero-gallery]');
+if(heroGallery){
+  const slides=Array.from(heroGallery.querySelectorAll<HTMLElement>('[data-hero-slide]'));
+  const dots=Array.from(heroGallery.querySelectorAll<HTMLButtonElement>('[data-hero-dot]'));
+  const label=heroGallery.querySelector<HTMLElement>('[data-hero-label]')!;
+  const toggle=heroGallery.querySelector<HTMLButtonElement>('[data-hero-toggle]')!;
+  let active=0;let timer=0;let inView=true;let held=false;let userPaused=false;
+  const stop=()=>{if(timer){clearTimeout(timer);timer=0;}};
+  const canRotate=()=>!motion.matches&&inView&&!held&&!userPaused&&document.visibilityState==='visible';
+  const schedule=()=>{stop();if(canRotate())timer=window.setTimeout(()=>{show((active+1)%slides.length);},5500);};
+  const show=(next:number)=>{
+    active=next;heroGallery.dataset.activeSlide=String(active);
+    slides.forEach((slide,i)=>{const selected=i===active;slide.classList.toggle('is-active',selected);slide.setAttribute('aria-hidden',String(!selected));});
+    dots.forEach((dot,i)=>dot.setAttribute('aria-pressed',String(i===active)));
+    label.textContent=dots[active].getAttribute('aria-label')!.replace(/^Mostrar /,'').replace(/^./,c=>c.toUpperCase());
+    schedule();
+  };
+  dots.forEach((dot,i)=>dot.addEventListener('click',()=>show(i)));
+  toggle.addEventListener('click',()=>{userPaused=!userPaused;toggle.setAttribute('aria-pressed',String(userPaused));toggle.setAttribute('aria-label',userPaused?'Reanudar cambio de imágenes':'Pausar cambio de imágenes');schedule();});
+  heroGallery.addEventListener('pointerenter',()=>{held=true;stop();});
+  heroGallery.addEventListener('pointerleave',()=>{held=false;schedule();});
+  heroGallery.addEventListener('focusin',()=>{held=true;stop();});
+  heroGallery.addEventListener('focusout',()=>{held=false;schedule();});
+  document.addEventListener('visibilitychange',schedule);
+  motion.addEventListener('change',schedule);
+  new IntersectionObserver(([entry])=>{inView=entry.isIntersecting;schedule();},{threshold:.25}).observe(heroGallery);
+  schedule();
+}
 if(!motion.matches){
   const revealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-visible');revealObserver.unobserve(entry.target);}}),{threshold:.08});
   document.querySelectorAll<HTMLElement>('.reveal').forEach(el=>{el.classList.add('will-reveal');revealObserver.observe(el);});

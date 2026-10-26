@@ -56,6 +56,51 @@ test('los enlaces usan el icono oficial de WhatsApp',async({page})=>{
   await expect(links.first().locator('.whatsapp-mark')).toBeVisible();
   await expect(links.locator('.whatsapp-mark')).toHaveCount(await links.count());
 });
+test('el hero editorial muestra tres escenas y permite elegirlas',async({page})=>{
+  await page.goto('/');
+  const gallery=page.locator('[data-hero-gallery]');
+  await expect(gallery.locator('[data-hero-slide]')).toHaveCount(3);
+  expect(await gallery.locator('img').evaluateAll(images=>images.every(image=>(image.getAttribute('alt')??'').trim().length>0))).toBeTruthy();
+  await gallery.locator('[data-hero-dot]').nth(2).click();
+  await expect(gallery).toHaveAttribute('data-active-slide','2');
+  await expect(gallery.locator('[data-hero-dot]').nth(2)).toHaveAttribute('aria-pressed','true');
+});
+test('el hero no rota automáticamente con movimiento reducido',async({page})=>{
+  test.setTimeout(30000);
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await page.goto('/');
+  const gallery=page.locator('[data-hero-gallery]');
+  await expect(gallery).toHaveAttribute('data-active-slide','0');
+  await page.waitForTimeout(5800);
+  await expect(gallery).toHaveAttribute('data-active-slide','0');
+  await gallery.locator('[data-hero-dot]').nth(1).click();
+  await expect(gallery).toHaveAttribute('data-active-slide','1');
+});
+test('el hero permite pausar y reanudar la rotación',async({page})=>{
+  test.setTimeout(30000);
+  await page.goto('/');
+  const gallery=page.locator('[data-hero-gallery]');
+  const toggle=gallery.locator('[data-hero-toggle]');
+  await toggle.click();
+  await expect(toggle).toHaveAttribute('aria-pressed','true');
+  await page.waitForTimeout(5800);
+  await expect(gallery).toHaveAttribute('data-active-slide','0');
+  await toggle.click();
+  await page.mouse.move(0,0);
+  await page.waitForTimeout(5800);
+  await expect(gallery).toHaveAttribute('data-active-slide','1');
+});
+test('el hero pausa la rotación cuando la pestaña está oculta',async({page})=>{
+  test.setTimeout(35000);
+  await page.goto('/');
+  const gallery=page.locator('[data-hero-gallery]');
+  await page.evaluate(()=>{Object.defineProperty(document,'visibilityState',{configurable:true,value:'hidden'});document.dispatchEvent(new Event('visibilitychange'));});
+  await page.waitForTimeout(5800);
+  await expect(gallery).toHaveAttribute('data-active-slide','0');
+  await page.evaluate(()=>{Object.defineProperty(document,'visibilityState',{configurable:true,value:'visible'});document.dispatchEvent(new Event('visibilitychange'));});
+  await page.waitForTimeout(5800);
+  await expect(gallery).toHaveAttribute('data-active-slide','1');
+});
 test('accesibilidad automática WCAG en las rutas',async({page})=>{
   test.setTimeout(120000);
   for(const route of routes){await page.goto(route);await page.emulateMedia({reducedMotion:'reduce'});const report=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();expect(report.violations,JSON.stringify(report.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)})))).toEqual([]);}
@@ -67,7 +112,7 @@ test('movimiento reducido y progresión del proceso',async({page})=>{
 });
 test('sin JavaScript conserva navegación y evita envío del formulario',async({browser})=>{
   const context=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});const page=await context.newPage();
-  await page.goto('http://127.0.0.1:4321/');await expect(page.locator('#main-nav')).toBeVisible();await expect(page.locator('.loan-card').first()).toBeVisible();
+  await page.goto('http://127.0.0.1:4321/');await expect(page.locator('#main-nav')).toBeVisible();await expect(page.locator('.loan-card').first()).toBeVisible();await expect(page.locator('[data-hero-slide]').first()).toBeVisible();
   await page.goto('http://127.0.0.1:4321/simulador/');await expect(page.locator('#capital')).toBeDisabled();await expect(page.locator('noscript p')).toBeVisible();expect(await page.locator('noscript p').evaluate(el=>el.textContent)).toContain('Activa JavaScript');await context.close();
 });
 test('una dirección inexistente devuelve la página 404 personalizada',async({page})=>{
