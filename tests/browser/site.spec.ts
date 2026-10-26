@@ -4,6 +4,7 @@ const routes=['/','/prestamos/','/prestamos/semanal/','/prestamos/catorcenal/','
 
 for(const width of [320,390,768,1440]) test(`rutas, imágenes y desbordamiento a ${width}px`,async({page})=>{
   await page.setViewportSize({width,height:900});
+  await page.emulateMedia({reducedMotion:'reduce'});
   const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
   for(const path of routes){
     const response=await page.goto(path);expect(response?.status()).toBe(200);
