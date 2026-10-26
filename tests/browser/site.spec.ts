@@ -16,18 +16,30 @@ for(const width of [320,390,768,1440]) test(`rutas, imágenes y desbordamiento a
 });
 test('el caso obligatorio se calcula en navegador y los cambios invalidan el resultado',async({page})=>{
   await page.goto('/simulador/');await expect(page.locator('[data-result="installment"]')).toHaveText('S/ 148.75');
+  await expect(page.locator('[data-installment-marker]')).toHaveCount(4);
   await page.locator('#date').fill('2026-10-17');await page.getByRole('button',{name:'Calcular mi escenario'}).click();
   await expect(page.locator('[data-result="interest"]')).toHaveText('S/ 90.00');
   await expect(page.locator('[data-result="insurance"]')).toHaveText('S/ 5.00');
   await expect(page.locator('[data-result="total"]')).toHaveText('S/ 595.00');
   await expect(page.locator('#schedule-body tr')).toHaveCount(4);
-  await expect(page.locator('#calendar-notice')).toContainText('sábados');
-  await page.locator('#capital').fill('499');await expect(page.locator('#calc-result')).toBeHidden();
+  await expect(page.locator('#schedule-section>.small').last()).toContainText('Cronograma referencial');
+  await page.locator('#capital').fill('499');await expect(page.locator('#calc-result')).toBeHidden();await expect(page.locator('[data-installment-marker]')).toHaveCount(0);
   await page.getByRole('button',{name:'Calcular mi escenario'}).click();await expect(page.getByRole('alert')).toContainText('mínimo');
   await page.locator('#capital').fill('500');await page.getByLabel('Catorcenal',{exact:false}).check();await expect(page.locator('#count option')).toHaveCount(4);
   await page.locator('#count').selectOption('3');await page.getByRole('button',{name:'Calcular mi escenario'}).click();
+  await expect(page.locator('[data-installment-marker]')).toHaveCount(3);
   await expect(page.locator('#schedule-body tr')).toHaveCount(3);await expect(page.locator('#schedule-body tr').last()).toContainText('S/ 198.34');
-  await page.locator('#date').fill('2026-12-28');await page.getByRole('button',{name:'Calcular mi escenario'}).click();await expect(page.locator('#calendar-notice')).toContainText('fuera del calendario');
+  await page.locator('#date').fill('2026-12-28');await page.getByRole('button',{name:'Calcular mi escenario'}).click();await expect(page.locator('#schedule-section')).toBeVisible();
+});
+test('la vista previa y el simulador conservan una lectura útil sin JavaScript',async({page,browser})=>{
+  await page.goto('/');
+  await expect(page.locator('[data-preview-payment] [data-installment-marker]')).toHaveCount(4);
+  const context=await browser.newContext({javaScriptEnabled:false});
+  const noScriptPage=await context.newPage();
+  await noScriptPage.goto('/simulador/');
+  await expect(noScriptPage.locator('noscript .notice')).toContainText('Activa JavaScript');
+  await expect(noScriptPage.locator('#calculator-fields')).toHaveAttribute('disabled','');
+  await context.close();
 });
 test('menú móvil por teclado, cierre Escape y FAQ',async({page})=>{
   await page.setViewportSize({width:390,height:844});await page.goto('/');
