@@ -32,6 +32,7 @@
 }
 /* WhatsApp marks retain their familiar service color. */
 .whatsapp-icon{display:inline-flex;color:#25D366}
+.whatsapp-mark{display:block}
 .floating-wa .whatsapp-icon{color:#25D366}
 /* A custom, Prestysull-colored map pin. */
 .map-pin{z-index:2;border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 8px 20px #102a4c35}

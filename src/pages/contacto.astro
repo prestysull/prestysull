@@ -2,13 +2,14 @@
 import Layout from '../layouts/Layout.astro';
 import WhatsApp from '../components/WhatsApp.astro';
 import Icon from '../components/Icon.astro';
+import WhatsAppMark from '../components/WhatsAppMark.astro';
 import {contact} from '../data/contacto';
 ---
 <Layout title="Contacto y ubicación en Sullana" description="Consulta con Prestysull por WhatsApp al 945 396 704. Visítanos en San Martín 1094, Sullana, de lunes a sábados.">
   <section class="container page-intro"><p class="eyebrow">Estamos cerca de ti</p><h1>Tu siguiente paso<br/><span>empieza aquí.</span></h1><p>Escríbenos o visítanos. Conversemos sobre la modalidad que te interesa.</p></section>
   <section class="container section section-topless contact-page">
     <div class="contact-details">
-      <div><span class="whatsapp-icon"><Icon name="chat" size={28}/></span><h2>Conversemos por WhatsApp</h2><p class="contact-phone">{contact.phone}</p><WhatsApp label="Consultar por WhatsApp"/></div>
+      <div><span class="whatsapp-icon"><WhatsAppMark size={28}/></span><h2>Conversemos por WhatsApp</h2><p class="contact-phone">{contact.phone}</p><WhatsApp label="Consultar por WhatsApp"/></div>
       <div><Icon name="clock" size={27}/><h2>Horario de atención</h2><p>{contact.days}<br/>{contact.hours}</p></div>
       <div><h2>Redes sociales</h2><div class="social-links">{[['Facebook',contact.facebook],['TikTok',contact.tiktok]].map(([name,url])=>url?<a href={url} target="_blank" rel="noopener noreferrer">{name} ↗</a>:<span>{name}<small>Enlace por confirmar</small></span>)}</div></div>
     </div>

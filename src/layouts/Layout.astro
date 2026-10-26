@@ -3,6 +3,7 @@ import '@fontsource-variable/manrope';
 import '../styles/global.css';
 import Icon from '../components/Icon.astro';
 import WhatsApp from '../components/WhatsApp.astro';
+import WhatsAppMark from '../components/WhatsAppMark.astro';
 import { contact } from '../data/contacto';
 import { company } from '../data/empresa';
 import { images } from '../data/imagenes';
@@ -43,11 +44,11 @@ const structured={'@context':'https://schema.org','@type':'Organization',name:co
         <div><a class="footer-brand" href={pathUrl()}><img src={pathUrl(images.logo)} width="682" height="602" alt="Prestysull — inicio"/></a><p>{company.tagline}</p><span class="small">{contact.city}.</span></div>
         <div><h2>Tu siguiente paso</h2><a href={pathUrl('prestamos/semanal/')}>Préstamo semanal</a><a href={pathUrl('prestamos/catorcenal/')}>Préstamo catorcenal</a><a href={pathUrl('simulador/')}>Simula tu préstamo</a></div>
         <div><h2>Conócenos</h2><a href={pathUrl('nosotros/')}>Sobre Prestysull</a><a href={pathUrl('contacto/')}>Contacto y ubicación</a><a href={pathUrl('#preguntas')}>Preguntas frecuentes</a><a href={pathUrl('privacidad/')}>Política de privacidad</a></div>
-        <div><h2>Estamos cerca</h2><a href={whatsapp()} target="_blank" rel="noopener noreferrer">{contact.phone} <Icon name="up" size={16}/></a><p>{contact.address}</p><p>{contact.days}<br/>{contact.hours}</p></div>
+        <div><h2>Estamos cerca</h2><a href={whatsapp()} target="_blank" rel="noopener noreferrer"><span class="whatsapp-icon"><WhatsAppMark size={16}/></span>{contact.phone} <Icon name="up" size={16}/></a><p>{contact.address}</p><p>{contact.days}<br/>{contact.hours}</p></div>
       </div>
       <div class="container footer-bottom"><span>© {new Date().getFullYear()} Prestysull</span><span>Financiamiento sujeto a evaluación y aprobación.</span><span>Hecho para dar el siguiente paso.</span></div>
     </footer>
-    <a class="floating-wa" href={whatsapp()} target="_blank" rel="noopener noreferrer" aria-label="Consultar por WhatsApp (abre una nueva pestaña)"><span class="whatsapp-icon"><Icon name="chat" size={25}/></span><span>¿Conversamos?</span></a>
+    <a class="floating-wa" href={whatsapp()} target="_blank" rel="noopener noreferrer" aria-label="Consultar por WhatsApp (abre una nueva pestaña)"><span class="whatsapp-icon"><WhatsAppMark size={25}/></span><span>¿Conversamos?</span></a>
     <script src="../scripts/site.ts"></script>
   </body>
 </html>

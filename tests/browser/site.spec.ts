@@ -50,6 +50,12 @@ test('WhatsApp contextual codificado, navegación interna y contenido de producc
   for(const href of seen){expect((await request.get(href)).status(),href).toBe(200);}
   expect((await request.get('/robots.txt')).status()).toBe(200);expect((await request.get('/sitemap.xml')).status()).toBe(200);
 });
+test('los enlaces usan el icono oficial de WhatsApp',async({page})=>{
+  await page.goto('/');
+  const links=page.locator('a[href^="https://wa.me/"]');
+  await expect(links.first().locator('.whatsapp-mark')).toBeVisible();
+  await expect(links.locator('.whatsapp-mark')).toHaveCount(await links.count());
+});
 test('accesibilidad automática WCAG en las rutas',async({page})=>{
   test.setTimeout(120000);
   for(const route of routes){await page.goto(route);await page.emulateMedia({reducedMotion:'reduce'});const report=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();expect(report.violations,JSON.stringify(report.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)})))).toEqual([]);}
