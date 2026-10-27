@@ -8,7 +8,6 @@ import WhatsApp from './WhatsApp.astro';
   <span class="card-light" data-card-light aria-hidden="true"></span>
   <div class="card-top"><span class="icon-tile"><Icon name={loan.icon} size={30}/></span><span class="pill">Cada {loan.days} días</span></div>
   <p class="eyebrow">{loan.audience}</p><h3>{loan.name}</h3><p>{loan.short}</p>
-  <div class="loan-timeline" data-card-timeline aria-label={`Frecuencia de pago: cada ${loan.days} días`}><span>Tu ritmo</span><div class="loan-timeline-track" aria-hidden="true">{Array.from({length:4},()=> <i></i>)}</div><strong>{loan.days} días</strong></div>
   <div class="loan-limit"><span>Hasta <b>{loan.maxInstallments}</b> cuotas</span><Icon name="calendar"/></div>
   <div class="card-actions"><a class="text-link" href={pathUrl(`prestamos/${key}/`)}>Conocer requisitos <Icon name="arrow" size={20}/></a><WhatsApp context={key as 'semanal'|'catorcenal'} label="Consultar" variant="compact"/></div>
 </article>)}</div>

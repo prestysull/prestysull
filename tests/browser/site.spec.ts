@@ -122,9 +122,9 @@ test('las tarjetas y el proceso tienen movimiento editorial',async({page})=>{
   await page.goto('/');
   const cards=page.locator('[data-loan-card]');
   await expect(cards).toHaveCount(2);
-  await expect(cards.locator('[data-card-timeline]')).toHaveCount(2);
-  await expect(cards.nth(0).locator('[data-card-timeline]')).toContainText('7 días');
-  await expect(cards.nth(1).locator('[data-card-timeline]')).toContainText('14 días');
+  await expect(cards.locator('[data-card-timeline]')).toHaveCount(0);
+  await expect(cards.nth(0).locator('.pill')).toHaveText('Cada 7 días');
+  await expect(cards.nth(1).locator('.pill')).toHaveText('Cada 14 días');
   const process=page.locator('.process-art');
   await expect(process.locator('[data-process-scene]')).toHaveCount(6);
   await expect(process.locator('[data-process-scene]').first().locator('.whatsapp-mark')).toBeVisible();
