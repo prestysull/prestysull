@@ -13,22 +13,19 @@ const motion=matchMedia('(prefers-reduced-motion: reduce)');
 const heroGallery=document.querySelector<HTMLElement>('[data-hero-gallery]');
 if(heroGallery){
   const slides=Array.from(heroGallery.querySelectorAll<HTMLElement>('[data-hero-slide]'));
-  const dots=Array.from(heroGallery.querySelectorAll<HTMLButtonElement>('[data-hero-dot]'));
-  const label=heroGallery.querySelector<HTMLElement>('[data-hero-label]')!;
-  const toggle=heroGallery.querySelector<HTMLButtonElement>('[data-hero-toggle]')!;
-  let active=0;let timer=0;let inView=true;let hovered=false;let focused=false;let userPaused=false;
+  let active=0;let timer=0;let inView=true;let hovered=false;let focused=false;let swipeStart:{x:number;y:number}|null=null;
   const stop=()=>{if(timer){clearTimeout(timer);timer=0;}};
-  const canRotate=()=>!motion.matches&&inView&&!hovered&&!focused&&!userPaused&&document.visibilityState==='visible';
+  const canRotate=()=>!motion.matches&&inView&&!hovered&&!focused&&document.visibilityState==='visible';
   const schedule=()=>{stop();if(canRotate())timer=window.setTimeout(()=>{show((active+1)%slides.length);},5500);};
   const show=(next:number)=>{
-    active=next;heroGallery.dataset.activeSlide=String(active);
+    active=(next+slides.length)%slides.length;heroGallery.dataset.activeSlide=String(active);
     slides.forEach((slide,i)=>{const selected=i===active;slide.classList.toggle('is-active',selected);slide.setAttribute('aria-hidden',String(!selected));});
-    dots.forEach((dot,i)=>dot.setAttribute('aria-pressed',String(i===active)));
-    label.textContent=dots[active].getAttribute('aria-label')!.replace(/^Mostrar /,'').replace(/^./,c=>c.toUpperCase());
     schedule();
   };
-  dots.forEach((dot,i)=>dot.addEventListener('click',()=>show(i)));
-  toggle.addEventListener('click',()=>{userPaused=!userPaused;toggle.setAttribute('aria-pressed',String(userPaused));toggle.setAttribute('aria-label',userPaused?'Reanudar cambio de imágenes':'Pausar cambio de imágenes');schedule();});
+  heroGallery.addEventListener('keydown',event=>{if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();show(active+(event.key==='ArrowRight'?1:-1));}});
+  heroGallery.addEventListener('pointerdown',event=>{if(event.pointerType==='touch')swipeStart={x:event.clientX,y:event.clientY};});
+  heroGallery.addEventListener('pointerup',event=>{if(!swipeStart)return;const dx=event.clientX-swipeStart.x;const dy=event.clientY-swipeStart.y;swipeStart=null;if(Math.abs(dx)>=45&&Math.abs(dx)>Math.abs(dy))show(active+(dx<0?1:-1));});
+  heroGallery.addEventListener('pointercancel',()=>{swipeStart=null;});
   heroGallery.addEventListener('pointerenter',()=>{hovered=true;stop();});
   heroGallery.addEventListener('pointerleave',()=>{hovered=false;schedule();});
   heroGallery.addEventListener('focusin',()=>{focused=true;stop();});
@@ -66,12 +63,15 @@ if(steps.length){
   },{rootMargin:'-25% 0px -35% 0px'});
   steps.forEach(step=>observer.observe(step));
 }
+const loanCards=Array.from(document.querySelectorAll<HTMLElement>('[data-loan-card]'));
 if(matchMedia('(hover:hover) and (pointer:fine)').matches){
-  document.querySelectorAll<HTMLElement>('[data-loan-card]').forEach(card=>{
+  loanCards.forEach(card=>{
     card.addEventListener('pointermove',event=>{const box=card.getBoundingClientRect();card.style.setProperty('--mx',`${event.clientX-box.left}px`);card.style.setProperty('--my',`${event.clientY-box.top}px`);});
     card.addEventListener('pointerleave',()=>{card.style.removeProperty('--mx');card.style.removeProperty('--my');});
   });
 }
+const cardObserver=new IntersectionObserver(entries=>entries.forEach(entry=>entry.target.classList.toggle('is-scroll-active',entry.isIntersecting)),{rootMargin:'-30% 0px -30% 0px'});
+loanCards.forEach(card=>cardObserver.observe(card));
 const carousel=document.querySelector<HTMLElement>('.testimonials');
 if(carousel){
   const move=(direction:number)=>carousel.scrollBy({left:direction*(carousel.querySelector('article')!.clientWidth+24),behavior:motion.matches?'instant':'smooth'});

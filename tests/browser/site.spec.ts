@@ -74,9 +74,13 @@ test('el hero editorial muestra tres escenas y permite elegirlas',async({page})=
   const gallery=page.locator('[data-hero-gallery]');
   await expect(gallery.locator('[data-hero-slide]')).toHaveCount(3);
   expect(await gallery.locator('img').evaluateAll(images=>images.every(image=>(image.getAttribute('alt')??'').trim().length>0))).toBeTruthy();
-  await gallery.locator('[data-hero-dot]').nth(2).click();
+  await expect(gallery.locator('[data-hero-dot],[data-hero-toggle]')).toHaveCount(0);
+  await gallery.dispatchEvent('pointerdown',{pointerType:'touch',clientX:260,clientY:200});
+  await gallery.dispatchEvent('pointerup',{pointerType:'touch',clientX:120,clientY:202});
+  await expect(gallery).toHaveAttribute('data-active-slide','1');
+  await gallery.focus();
+  await page.keyboard.press('ArrowRight');
   await expect(gallery).toHaveAttribute('data-active-slide','2');
-  await expect(gallery.locator('[data-hero-dot]').nth(2)).toHaveAttribute('aria-pressed','true');
 });
 test('el hero no rota automáticamente con movimiento reducido',async({page})=>{
   test.setTimeout(30000);
@@ -86,34 +90,19 @@ test('el hero no rota automáticamente con movimiento reducido',async({page})=>{
   await expect(gallery).toHaveAttribute('data-active-slide','0');
   await page.waitForTimeout(5800);
   await expect(gallery).toHaveAttribute('data-active-slide','0');
-  await gallery.locator('[data-hero-dot]').nth(1).click();
-  await expect(gallery).toHaveAttribute('data-active-slide','1');
-});
-test('el hero permite pausar y reanudar la rotación',async({page})=>{
-  test.setTimeout(30000);
-  await page.goto('/');
-  const gallery=page.locator('[data-hero-gallery]');
-  const toggle=gallery.locator('[data-hero-toggle]');
-  await toggle.click();
-  await expect(toggle).toHaveAttribute('aria-pressed','true');
-  await page.waitForTimeout(5800);
-  await expect(gallery).toHaveAttribute('data-active-slide','0');
-  await toggle.click();
-  await toggle.evaluate(element=>(element as HTMLElement).blur());
-  await page.mouse.move(0,0);
-  await page.waitForTimeout(5800);
+  await gallery.dispatchEvent('pointerdown',{pointerType:'touch',clientX:260,clientY:200});
+  await gallery.dispatchEvent('pointerup',{pointerType:'touch',clientX:120,clientY:202});
   await expect(gallery).toHaveAttribute('data-active-slide','1');
 });
 test('el hero conserva la pausa de foco cuando el puntero sale',async({page})=>{
   test.setTimeout(30000);
   await page.goto('/');
   const gallery=page.locator('[data-hero-gallery]');
-  const toggle=gallery.locator('[data-hero-toggle]');
-  await toggle.focus();
+  await gallery.focus();
   await gallery.dispatchEvent('pointerleave');
   await page.waitForTimeout(5800);
   await expect(gallery).toHaveAttribute('data-active-slide','0');
-  await toggle.evaluate(element=>(element as HTMLElement).blur());
+  await gallery.evaluate(element=>(element as HTMLElement).blur());
   await page.waitForTimeout(5800);
   await expect(gallery).toHaveAttribute('data-active-slide','1');
 });
@@ -143,8 +132,21 @@ test('las tarjetas y el proceso tienen movimiento editorial',async({page})=>{
   await expect(process).toHaveAttribute('data-scene','4');
   await page.setViewportSize({width:320,height:800});
   await page.reload();
-  await expect(page.locator('.process-art')).toBeVisible();
+  await expect(page.locator('.process-art')).toBeHidden();
+  await cards.nth(0).evaluate(element=>element.scrollIntoView({block:'center'}));
+  await expect(cards.nth(0)).toHaveClass(/is-scroll-active/);
+  await cards.nth(1).evaluate(element=>element.scrollIntoView({block:'center'}));
+  await expect(cards.nth(1)).toHaveClass(/is-scroll-active/);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBeTruthy();
+});
+test('el cronograma móvil muestra sus tres columnas sin desplazamiento horizontal',async({page})=>{
+  await page.setViewportSize({width:320,height:800});
+  await page.goto('/simulador/');
+  await page.getByRole('button',{name:'Calcular mi escenario'}).click();
+  const table=page.locator('.table-wrap');
+  await table.scrollIntoViewIfNeeded();
+  await expect(page.getByRole('columnheader',{name:'Importe'})).toBeInViewport();
+  expect(await table.evaluate(element=>element.scrollWidth<=element.clientWidth)).toBeTruthy();
 });
 test('accesibilidad automática WCAG en las rutas',async({page})=>{
   test.setTimeout(120000);

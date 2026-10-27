@@ -28,19 +28,12 @@ const example=simulate(simulator.defaultCapital,simulator.defaultRate,simulator.
     </div>
     <div class="hero-visual enter" style="--order:2">
       <div class="hero-shape" aria-hidden="true"></div><div class="orbit orbit-one" aria-hidden="true" data-parallax="0.045"></div>
-      <figure class="hero-photo" data-hero-gallery data-active-slide="0" aria-label="Personas que trabajan por sus metas">
+      <figure class="hero-photo" data-hero-gallery data-active-slide="0" tabindex="0" aria-label="Galería de personas que trabajan por sus metas. Desliza o usa las flechas izquierda y derecha para cambiar de imagen.">
         <div class="hero-slides">
           {images.hero.map((scene,i)=><div class:list={['hero-slide',i===0&&'is-active']} data-hero-slide aria-hidden={i===0?'false':'true'}>
             <Image src={scene.src} alt={scene.alt} widths={[480,800,1200]} sizes="(max-width: 760px) 100vw, 48vw" format="webp" quality={82} loading={i===0?'eager':'lazy'} fetchpriority={i===0?'high':'auto'}/>
           </div>)}
         </div>
-        <figcaption class="hero-gallery-controls">
-          <span class="hero-gallery-label" data-hero-label>{images.hero[0].label}</span>
-          <span class="hero-dots" role="group" aria-label="Elegir imagen del encabezado">
-            {images.hero.map((scene,i)=><button type="button" data-hero-dot data-slide={i} aria-label={`Mostrar ${scene.label.toLowerCase()}`} aria-pressed={i===0?'true':'false'}><span></span></button>)}
-          </span>
-          <button class="hero-gallery-toggle" type="button" data-hero-toggle aria-label="Pausar cambio de imágenes" aria-pressed="false"><span aria-hidden="true"></span></button>
-        </figcaption>
       </figure>
       <div class="photo-sticker" data-parallax="-0.025"><span class="sticker-icon"><Icon name="store" size={26}/></span><div><b>Tu trabajo, tu impulso.</b><small>Nosotros, cerca de ti.</small></div></div>
       <div class="round-sticker" aria-hidden="true"><Icon name="up" size={45}/></div>
