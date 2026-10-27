@@ -13,7 +13,6 @@ if(form){
   const status=document.querySelector<HTMLElement>('#calc-status')!;
   const scheduleSection=document.querySelector<HTMLElement>('#schedule-section')!;
   const tbody=document.querySelector<HTMLTableSectionElement>('#schedule-body')!;
-  const installmentTrack=document.querySelector<HTMLElement>('[data-installment-track]')!;
   const mode=()=>form.querySelector<HTMLInputElement>('input[name="mode"]:checked')!.value as LoanMode;
   const set=(key:string,text:string)=>document.querySelectorAll<HTMLElement>(`[data-result="${key}"]`).forEach(el=>el.textContent=text);
   date.value=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Lima',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
@@ -36,7 +35,6 @@ if(form){
       set('frequency',`${count.value} cuotas · cada ${loans[mode()].days} días`);
       for(const key of ['capital','interest','insurance','total'] as const) set(key,formatMoney(r[key]));
       set('schedule-total',formatMoney(r.total));
-      installmentTrack.replaceChildren(...r.installments.map((_,i)=>{const marker=document.createElement('i');marker.dataset.installmentMarker='';marker.style.setProperty('--i',String(i));return marker;}));
       tbody.replaceChildren(...rows.map((row,i)=>{
         const tr=document.createElement('tr');
         const cells=[String(i+1).padStart(2,'0'),formatDate(row.base),formatMoney(r.installments[i])];
@@ -47,12 +45,12 @@ if(form){
       status.textContent=`Cálculo actualizado: ${count.value} cuotas. Cuota base ${formatMoney(r.installments[0])}.`;
       status.classList.add('sr-only');
     }catch(e){
-      result.hidden=true;scheduleSection.hidden=true;installmentTrack.replaceChildren();
+      result.hidden=true;scheduleSection.hidden=true;
       error.textContent=e instanceof Error?e.message:'No se pudo calcular. Revisa los datos e inténtalo otra vez.';
       error.hidden=false;status.textContent='Revisa los datos para continuar.';status.classList.remove('sr-only');
     }
   }
-  form.addEventListener('input',()=>{result.hidden=true;scheduleSection.hidden=true;installmentTrack.replaceChildren();error.hidden=true;status.classList.remove('sr-only');status.textContent='Modificaste los datos. Pulsa «Calcular mi escenario» para actualizar el resultado.';});
+  form.addEventListener('input',()=>{result.hidden=true;scheduleSection.hidden=true;error.hidden=true;status.classList.remove('sr-only');status.textContent='Modificaste los datos. Pulsa «Calcular mi escenario» para actualizar el resultado.';});
   form.querySelectorAll('input[name="mode"]').forEach(input=>input.addEventListener('change',syncCount));
   form.addEventListener('submit',event=>{event.preventDefault();calculate();});
   syncCount();document.querySelector<HTMLFieldSetElement>('#calculator-fields')!.disabled=false;calculate();

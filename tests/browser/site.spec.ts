@@ -17,7 +17,7 @@ for(const width of [320,390,768,1440]) test(`rutas, imágenes y desbordamiento a
 });
 test('el caso obligatorio se calcula en navegador y los cambios invalidan el resultado',async({page})=>{
   await page.goto('/simulador/');await expect(page.locator('[data-result="installment"]')).toHaveText('S/ 148.75');
-  await expect(page.locator('[data-installment-marker]')).toHaveCount(4);
+  await expect(page.locator('[data-installment-marker]')).toHaveCount(0);
   await page.locator('#date').fill('2026-10-17');await page.getByRole('button',{name:'Calcular mi escenario'}).click();
   await expect(page.locator('[data-result="interest"]')).toHaveText('S/ 90.00');
   await expect(page.locator('[data-result="insurance"]')).toHaveText('S/ 5.00');
@@ -28,13 +28,15 @@ test('el caso obligatorio se calcula en navegador y los cambios invalidan el res
   await page.getByRole('button',{name:'Calcular mi escenario'}).click();await expect(page.getByRole('alert')).toContainText('mínimo');
   await page.locator('#capital').fill('500');await page.getByLabel('Catorcenal',{exact:false}).check();await expect(page.locator('#count option')).toHaveCount(4);
   await page.locator('#count').selectOption('3');await page.getByRole('button',{name:'Calcular mi escenario'}).click();
-  await expect(page.locator('[data-installment-marker]')).toHaveCount(3);
+  await expect(page.locator('[data-installment-marker]')).toHaveCount(0);
   await expect(page.locator('#schedule-body tr')).toHaveCount(3);await expect(page.locator('#schedule-body tr').last()).toContainText('S/ 198.34');
   await page.locator('#date').fill('2026-12-28');await page.getByRole('button',{name:'Calcular mi escenario'}).click();await expect(page.locator('#schedule-section')).toBeVisible();
 });
 test('la vista previa y el simulador conservan una lectura útil sin JavaScript',async({page,browser})=>{
   await page.goto('/');
-  await expect(page.locator('[data-preview-payment] [data-installment-marker]')).toHaveCount(4);
+  await expect(page.locator('[data-preview-payment]')).toHaveCount(0);
+  await page.goto('/simulador/');
+  await expect(page.locator('.result-payment')).toHaveCount(0);
   const context=await browser.newContext({javaScriptEnabled:false});
   const noScriptPage=await context.newPage();
   await noScriptPage.goto('/simulador/');
@@ -73,14 +75,20 @@ test('el hero editorial muestra tres escenas y permite elegirlas',async({page})=
   await page.goto('/');
   const gallery=page.locator('[data-hero-gallery]');
   await expect(gallery.locator('[data-hero-slide]')).toHaveCount(3);
+  const stack=page.locator('[data-hero-stack]');
+  await expect(stack).toHaveCount(3);
+  await expect(stack.filter({has:page.locator('img')})).toHaveCount(3);
   expect(await gallery.locator('img').evaluateAll(images=>images.every(image=>(image.getAttribute('alt')??'').trim().length>0))).toBeTruthy();
   await expect(gallery.locator('[data-hero-dot],[data-hero-toggle]')).toHaveCount(0);
+  await page.locator('[data-hero-next]').click();
+  await expect(gallery).toHaveAttribute('data-active-slide','1');
+  await expect(page.locator('[data-hero-stack-index="2"]')).toHaveClass(/is-stack-near/);
   await gallery.dispatchEvent('pointerdown',{pointerType:'touch',clientX:260,clientY:200});
   await gallery.dispatchEvent('pointerup',{pointerType:'touch',clientX:120,clientY:202});
-  await expect(gallery).toHaveAttribute('data-active-slide','1');
+  await expect(gallery).toHaveAttribute('data-active-slide','2');
   await gallery.focus();
   await page.keyboard.press('ArrowRight');
-  await expect(gallery).toHaveAttribute('data-active-slide','2');
+  await expect(gallery).toHaveAttribute('data-active-slide','0');
 });
 test('el hero no rota automáticamente con movimiento reducido',async({page})=>{
   test.setTimeout(30000);
@@ -139,14 +147,28 @@ test('las tarjetas y el proceso tienen movimiento editorial',async({page})=>{
   await expect(cards.nth(1)).toHaveClass(/is-scroll-active/);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBeTruthy();
 });
-test('el cronograma móvil muestra sus tres columnas sin desplazamiento horizontal',async({page})=>{
-  await page.setViewportSize({width:320,height:800});
-  await page.goto('/simulador/');
-  await page.getByRole('button',{name:'Calcular mi escenario'}).click();
-  const table=page.locator('.table-wrap');
-  await table.scrollIntoViewIfNeeded();
-  await expect(page.getByRole('columnheader',{name:'Importe'})).toBeInViewport();
-  expect(await table.evaluate(element=>element.scrollWidth<=element.clientWidth)).toBeTruthy();
+test('el cronograma centra la fecha en móvil y escritorio',async({page})=>{
+  for(const width of [320,1440]){
+    await page.setViewportSize({width,height:800});
+    await page.goto('/simulador/');
+    await page.getByRole('button',{name:'Calcular mi escenario'}).click();
+    const table=page.locator('.table-wrap');
+    await table.scrollIntoViewIfNeeded();
+    await expect(page.getByRole('columnheader',{name:'Importe'})).toBeInViewport();
+    expect(await page.getByRole('columnheader',{name:'Fecha de pago'}).evaluate(element=>getComputedStyle(element).textAlign)).toBe('center');
+    expect(await page.locator('#schedule-body tr').first().locator('td').first().evaluate(element=>getComputedStyle(element).textAlign)).toBe('center');
+    expect(await table.evaluate(element=>element.scrollWidth<=element.clientWidth)).toBeTruthy();
+  }
+});
+test('el mapa de contacto usa la identidad Prestysull',async({page})=>{
+  await page.goto('/contacto/');
+  await expect(page.locator('.map-chip')).toHaveText('Oficina Prestysull');
+  const colors=await page.evaluate(()=>({
+    background:getComputedStyle(document.querySelector('.location-art')!).backgroundImage,
+    route:getComputedStyle(document.querySelector('.route-line')!).stroke,
+  }));
+  expect(colors.background).toContain('rgb(16, 42, 76)');
+  expect(colors.route).toBe('rgb(212, 237, 131)');
 });
 test('accesibilidad automática WCAG en las rutas',async({page})=>{
   test.setTimeout(120000);

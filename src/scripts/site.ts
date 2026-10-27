@@ -13,6 +13,7 @@ const motion=matchMedia('(prefers-reduced-motion: reduce)');
 const heroGallery=document.querySelector<HTMLElement>('[data-hero-gallery]');
 if(heroGallery){
   const slides=Array.from(heroGallery.querySelectorAll<HTMLElement>('[data-hero-slide]'));
+  const stack=Array.from(document.querySelectorAll<HTMLElement>('[data-hero-stack]'));
   let active=0;let timer=0;let inView=true;let hovered=false;let focused=false;let swipeStart:{x:number;y:number}|null=null;
   const stop=()=>{if(timer){clearTimeout(timer);timer=0;}};
   const canRotate=()=>!motion.matches&&inView&&!hovered&&!focused&&document.visibilityState==='visible';
@@ -20,8 +21,10 @@ if(heroGallery){
   const show=(next:number)=>{
     active=(next+slides.length)%slides.length;heroGallery.dataset.activeSlide=String(active);
     slides.forEach((slide,i)=>{const selected=i===active;slide.classList.toggle('is-active',selected);slide.setAttribute('aria-hidden',String(!selected));});
+    stack.forEach((card,i)=>{const distance=(i-active+slides.length)%slides.length;card.classList.toggle('is-stack-near',distance===1);card.classList.toggle('is-stack-far',distance===2);});
     schedule();
   };
+  document.querySelector('[data-hero-next]')?.addEventListener('click',()=>show(active+1));
   heroGallery.addEventListener('keydown',event=>{if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();show(active+(event.key==='ArrowRight'?1:-1));}});
   heroGallery.addEventListener('pointerdown',event=>{if(event.pointerType==='touch')swipeStart={x:event.clientX,y:event.clientY};});
   heroGallery.addEventListener('pointerup',event=>{if(!swipeStart)return;const dx=event.clientX-swipeStart.x;const dy=event.clientY-swipeStart.y;swipeStart=null;if(Math.abs(dx)>=45&&Math.abs(dx)>Math.abs(dy))show(active+(dx<0?1:-1));});
