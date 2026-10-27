@@ -99,7 +99,21 @@ test('el hero permite pausar y reanudar la rotación',async({page})=>{
   await page.waitForTimeout(5800);
   await expect(gallery).toHaveAttribute('data-active-slide','0');
   await toggle.click();
+  await toggle.evaluate(element=>(element as HTMLElement).blur());
   await page.mouse.move(0,0);
+  await page.waitForTimeout(5800);
+  await expect(gallery).toHaveAttribute('data-active-slide','1');
+});
+test('el hero conserva la pausa de foco cuando el puntero sale',async({page})=>{
+  test.setTimeout(30000);
+  await page.goto('/');
+  const gallery=page.locator('[data-hero-gallery]');
+  const toggle=gallery.locator('[data-hero-toggle]');
+  await toggle.focus();
+  await gallery.dispatchEvent('pointerleave');
+  await page.waitForTimeout(5800);
+  await expect(gallery).toHaveAttribute('data-active-slide','0');
+  await toggle.evaluate(element=>(element as HTMLElement).blur());
   await page.waitForTimeout(5800);
   await expect(gallery).toHaveAttribute('data-active-slide','1');
 });

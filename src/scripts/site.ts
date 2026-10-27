@@ -16,9 +16,9 @@ if(heroGallery){
   const dots=Array.from(heroGallery.querySelectorAll<HTMLButtonElement>('[data-hero-dot]'));
   const label=heroGallery.querySelector<HTMLElement>('[data-hero-label]')!;
   const toggle=heroGallery.querySelector<HTMLButtonElement>('[data-hero-toggle]')!;
-  let active=0;let timer=0;let inView=true;let held=false;let userPaused=false;
+  let active=0;let timer=0;let inView=true;let hovered=false;let focused=false;let userPaused=false;
   const stop=()=>{if(timer){clearTimeout(timer);timer=0;}};
-  const canRotate=()=>!motion.matches&&inView&&!held&&!userPaused&&document.visibilityState==='visible';
+  const canRotate=()=>!motion.matches&&inView&&!hovered&&!focused&&!userPaused&&document.visibilityState==='visible';
   const schedule=()=>{stop();if(canRotate())timer=window.setTimeout(()=>{show((active+1)%slides.length);},5500);};
   const show=(next:number)=>{
     active=next;heroGallery.dataset.activeSlide=String(active);
@@ -29,10 +29,10 @@ if(heroGallery){
   };
   dots.forEach((dot,i)=>dot.addEventListener('click',()=>show(i)));
   toggle.addEventListener('click',()=>{userPaused=!userPaused;toggle.setAttribute('aria-pressed',String(userPaused));toggle.setAttribute('aria-label',userPaused?'Reanudar cambio de imágenes':'Pausar cambio de imágenes');schedule();});
-  heroGallery.addEventListener('pointerenter',()=>{held=true;stop();});
-  heroGallery.addEventListener('pointerleave',()=>{held=false;schedule();});
-  heroGallery.addEventListener('focusin',()=>{held=true;stop();});
-  heroGallery.addEventListener('focusout',()=>{held=false;schedule();});
+  heroGallery.addEventListener('pointerenter',()=>{hovered=true;stop();});
+  heroGallery.addEventListener('pointerleave',()=>{hovered=false;schedule();});
+  heroGallery.addEventListener('focusin',()=>{focused=true;stop();});
+  heroGallery.addEventListener('focusout',()=>{focused=false;schedule();});
   document.addEventListener('visibilitychange',schedule);
   motion.addEventListener('change',schedule);
   new IntersectionObserver(([entry])=>{inView=entry.isIntersecting;schedule();},{threshold:.25}).observe(heroGallery);
