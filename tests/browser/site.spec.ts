@@ -75,6 +75,7 @@ test('el hero editorial muestra tres escenas y permite elegirlas',async({page})=
   await page.goto('/');
   const gallery=page.locator('[data-hero-gallery]');
   await expect(gallery.locator('[data-hero-slide]')).toHaveCount(3);
+  await expect(page.locator('.photo-sticker')).toHaveCount(0);
   const stack=page.locator('[data-hero-stack]');
   await expect(stack).toHaveCount(3);
   await expect(stack.filter({has:page.locator('img')})).toHaveCount(3);
