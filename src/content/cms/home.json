@@ -1,0 +1,38 @@
+{
+  "heroEyebrow": "Préstamos en Sullana, Piura",
+  "heroTrust": "Atención humana. Financiamiento sujeto a evaluación.",
+  "loans": {
+    "eyebrow": "Un paso que va contigo",
+    "title": "Diferentes rutinas.",
+    "titleAccent": "Una misma forma de avanzar.",
+    "description": "Elige la modalidad que corresponde a tu actividad. Conoce los requisitos y conversemos.",
+    "footnote": "El monto, la tasa y el plazo se determinan según evaluación."
+  },
+  "process": {
+    "eyebrow": "Así damos el siguiente paso",
+    "title": "Primero te escuchamos.",
+    "titleAccent": "Después, evaluamos.",
+    "description": "Un proceso que toma en cuenta tu capacidad real de pago.",
+    "disclaimer": "La consulta no garantiza la aprobación."
+  },
+  "simulator": {
+    "eyebrow": "Haz números, con calma",
+    "title": "Tu próximo paso,",
+    "titleAccent": "más claro.",
+    "description": "Explora un monto, compara escenarios y conoce cómo se compone una cuota antes de conversar con un asesor.",
+    "button": "Ir al simulador",
+    "privacy": "Sin registros. El cálculo se realiza en tu dispositivo."
+  },
+  "about": {
+    "eyebrow": "Hola, somos Prestysull",
+    "photoLabel": "El valor de lo que haces, cada día.",
+    "link": "Conoce Prestysull"
+  },
+  "faq": {
+    "eyebrow": "Hablemos claro",
+    "title": "Es normal",
+    "titleAccent": "tener preguntas.",
+    "description": "Estas respuestas te ayudan a dar el primer paso.",
+    "link": "Estamos para orientarte"
+  }
+}

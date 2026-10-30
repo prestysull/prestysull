@@ -1,0 +1,12 @@
+{
+  "hero": [
+    {"src": "/uploads/comerciante.webp", "alt": "Comerciante organizando productos en su tienda", "label": "Comercio local"},
+    {"src": "/uploads/emprendedora-peruana.webp", "alt": "Emprendedora preparando productos en su negocio", "label": "Emprendimiento"},
+    {"src": "/uploads/trabajador-peruano.webp", "alt": "Trabajador revisando el inventario de su centro de trabajo", "label": "Trabajo diario"}
+  ],
+  "about": {
+    "src": "/uploads/comerciante.webp",
+    "alt": "Comerciante organizando productos en su tienda",
+    "label": "El valor de lo que haces, cada día."
+  }
+}
