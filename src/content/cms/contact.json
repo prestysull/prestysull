@@ -13,6 +13,25 @@
   "facebook": "https://www.facebook.com/share/1MEHAAR6az/",
   "tiktok": "https://www.tiktok.com/@prestysull?_r=1&_t=ZS-9AfIwpvrm9I",
   "map": "https://www.google.com/maps/search/?api=1&query=San%20Mart%C3%ADn%201094%2C%20Sullana%2C%20Per%C3%BA",
+  "page": {
+    "eyebrow": "Estamos cerca de ti",
+    "title": "Tu siguiente paso",
+    "titleAccent": "empieza aquí.",
+    "intro": "Escríbenos o visítanos. Conversemos sobre la modalidad que te interesa.",
+    "whatsappTitle": "Conversemos por WhatsApp",
+    "hoursTitle": "Horario de atención",
+    "socialTitle": "Redes sociales",
+    "officeLabel": "Nuestra oficina",
+    "mapsButton": "Ver dirección en Google Maps",
+    "mapNote": "La ilustración es decorativa. El enlace abre una búsqueda de la dirección; confirma la ubicación con un asesor."
+  },
+  "band": {
+    "eyebrow": "Las buenas ideas empiezan conversando",
+    "title": "Cuéntanos.",
+    "titleAccent": "¿Cuál es tu siguiente meta?",
+    "locationTitle": "Nos encontramos en Sullana.",
+    "locationLink": "Cómo llegar"
+  },
   "messages": {
     "general": "Hola, vi la página de Prestysull y quisiera recibir información sobre sus préstamos.",
     "semanal": "Hola, quisiera información sobre el préstamo semanal de Prestysull.",

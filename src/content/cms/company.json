@@ -5,6 +5,14 @@
   "intro": "Préstamos para comerciantes, emprendedores y trabajadores de Sullana. Conversemos sobre lo que quieres lograr.",
   "about": "Somos Prestysull, una microfinanciera que opera en Sullana, Piura. Ofrecemos las modalidades semanal y catorcenal, sujetas a evaluación de la capacidad real de pago.",
   "localTitle": "De aquí. Para tus próximos pasos.",
+  "page": {
+    "eyebrow": "Hola, somos Prestysull",
+    "title": "El impulso de",
+    "titleAccent": "todos los días.",
+    "sectionTitle": "Una conversación.",
+    "sectionTitleAccent": "Un próximo paso.",
+    "sectionDescription": "Atendemos consultas de comerciantes, emprendedores y trabajadores dependientes de todo Sullana. La propuesta de préstamo considera una evaluación de la capacidad real de pago."
+  },
   "demo": [
     {"title": "Historia", "text": "Espacio para contar cómo nació Prestysull y su vínculo con Sullana. Texto de demostración pendiente de revisión."},
     {"title": "Misión", "text": "Propuesta editorial por revisar: acompañar las metas de comerciantes y trabajadores con atención cercana."},

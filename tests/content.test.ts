@@ -6,6 +6,10 @@ import {
   type CmsSectionName,
   validateCmsSection,
 } from '../src/lib/content.ts';
+import {company} from '../src/data/empresa.ts';
+import {contact, messages} from '../src/data/contacto.ts';
+import {faqs} from '../src/data/faq.ts';
+import {loans, processSteps} from '../src/data/prestamos.ts';
 
 const sectionNames: CmsSectionName[] = [
   'home',
@@ -114,7 +118,48 @@ test('videos empieza desactivado y vacío, y bloquea enlaces o miniaturas insegu
     const item = {...validItem, [field]: value};
     assert.throws(
       () => validateCmsSection('videos', {...cmsContent.videos, enabled: true, items: [item]}),
-      new RegExp(`videos.*items\.0\.${field}`, 'i'),
+      new RegExp(String.raw`videos.*items\.0\.${field}`, 'i'),
     );
   }
+});
+
+test('los adaptadores públicos leen el contenido validado sin duplicar textos', () => {
+  assert.strictEqual(company, cmsContent.company);
+  assert.strictEqual(contact, cmsContent.contact);
+  assert.strictEqual(messages, cmsContent.contact.messages);
+  assert.strictEqual(faqs, cmsContent.faq.items);
+  assert.strictEqual(loans.semanal.requirements, cmsContent.loans.semanal.requirements);
+  assert.strictEqual(loans.catorcenal.requirements, cmsContent.loans.catorcenal.requirements);
+  assert.deepEqual(
+    processSteps.map(({title, text}) => ({title, text})),
+    cmsContent.loans.process,
+  );
+});
+
+test('días, máximos, iconos y configuración financiera no se vuelven editables', () => {
+  assert.deepEqual(
+    {
+      semanal: {days: loans.semanal.days, maxInstallments: loans.semanal.maxInstallments, icon: loans.semanal.icon},
+      catorcenal: {days: loans.catorcenal.days, maxInstallments: loans.catorcenal.maxInstallments, icon: loans.catorcenal.icon},
+    },
+    {
+      semanal: {days: 7, maxInstallments: 8, icon: 'store'},
+      catorcenal: {days: 14, maxInstallments: 4, icon: 'briefcase'},
+    },
+  );
+
+  const forbidden = new Set([
+    'rate', 'rates', 'insurance', 'insurancePercent', 'minimumCapital', 'technicalCapitalLimit',
+    'days', 'maxInstallments', 'holidays', 'formula', 'defaultRate', 'defaultCapital', 'defaultCount',
+  ]);
+  const visit = (value: unknown): void => {
+    if (Array.isArray(value)) return value.forEach(visit);
+    if (!value || typeof value !== 'object') return;
+    for (const [key, child] of Object.entries(value)) {
+      assert.equal(forbidden.has(key), false, `el CMS no debe incluir ${key}`);
+      visit(child);
+    }
+  };
+  visit(cmsContent.loans);
+  for (const section of ['home', 'company', 'faq', 'media', 'videos'] as const) visit(cmsContent[section]);
 });

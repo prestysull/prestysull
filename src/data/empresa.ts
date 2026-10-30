@@ -1,13 +1,3 @@
-export const company = {
-  name: 'Prestysull', tagline: 'El impulso de todos los días.',
-  heroLines: ['Tu esfuerzo', 'merece un', 'siguiente paso.'],
-  intro: 'Préstamos para comerciantes, emprendedores y trabajadores de Sullana. Conversemos sobre lo que quieres lograr.',
-  about: 'Somos Prestysull, una microfinanciera que opera en Sullana, Piura. Ofrecemos las modalidades semanal y catorcenal, sujetas a evaluación de la capacidad real de pago.',
-  localTitle: 'De aquí. Para tus próximos pasos.',
-  demo: [
-    {title:'Historia',text:'Espacio para contar cómo nació Prestysull y su vínculo con Sullana. Texto de demostración pendiente de revisión.'},
-    {title:'Misión',text:'Propuesta editorial por revisar: acompañar las metas de comerciantes y trabajadores con atención cercana.'},
-    {title:'Visión',text:'Espacio reservado para la visión institucional aprobada. Contenido de demostración.'},
-    {title:'Valores',text:'Propuesta para revisión: cercanía, claridad y responsabilidad. No representa una declaración institucional aprobada.'},
-  ],
-};
+import {cmsContent} from '../lib/content.ts';
+
+export const company = cmsContent.company;
