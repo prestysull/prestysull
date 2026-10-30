@@ -56,6 +56,14 @@ export const companySchema = z.object({
   intro: text,
   about: text,
   localTitle: shortText,
+  page: z.object({
+    eyebrow: shortText,
+    title: shortText,
+    titleAccent: shortText,
+    sectionTitle: shortText,
+    sectionTitleAccent: shortText,
+    sectionDescription: text,
+  }).strict(),
   demo: z.tuple([
     z.object({title: shortText, text}).strict(),
     z.object({title: shortText, text}).strict(),
@@ -82,12 +90,33 @@ export const contactSchema = z.object({
     const hostname = new URL(value).hostname;
     return hostname === 'maps.app.goo.gl' || hostname === 'www.google.com' || hostname === 'google.com';
   }, 'debe ser un enlace de Google Maps'),
+  page: z.object({
+    eyebrow: shortText,
+    title: shortText,
+    titleAccent: shortText,
+    intro: text,
+    whatsappTitle: shortText,
+    hoursTitle: shortText,
+    socialTitle: shortText,
+    officeLabel: shortText,
+    mapsButton: shortText,
+    mapNote: text,
+  }).strict(),
+  band: z.object({
+    eyebrow: shortText,
+    title: shortText,
+    titleAccent: shortText,
+    locationTitle: shortText,
+    locationLink: shortText,
+  }).strict(),
   messages: z.object({general: text, semanal: text, catorcenal: text, simulador: text}).strict(),
 }).strict();
 
 export const loansSchema = z.object({
   semanal: loanCopySchema,
   catorcenal: loanCopySchema,
+  overview: z.object({eyebrow: shortText, title: shortText, titleAccent: shortText, description: text, simulatorButton: shortText}).strict(),
+  detail: z.object({backLink: shortText, requirementsEyebrow: shortText, requirementsTitle: shortText, requirementsTitleAccent: shortText, simulatorLink: shortText, requirementsDisclaimer: text}).strict(),
   process: z.tuple([
     z.object({title: shortText, text}).strict(),
     z.object({title: shortText, text}).strict(),

@@ -80,6 +80,11 @@ test('el hero editorial muestra tres escenas y permite elegirlas',async({page})=
   await expect(stack).toHaveCount(3);
   await expect(stack.filter({has:page.locator('img')})).toHaveCount(3);
   expect(await gallery.locator('img').evaluateAll(images=>images.every(image=>(image.getAttribute('alt')??'').trim().length>0))).toBeTruthy();
+  expect(await gallery.locator('img').evaluateAll(images=>images.every(image=>new URL((image as HTMLImageElement).src).pathname.includes('/uploads/')))).toBeTruthy();
+  await expect(gallery.locator('img').first()).toHaveAttribute('loading','eager');
+  await expect(gallery.locator('img').nth(1)).toHaveAttribute('loading','lazy');
+  await expect(gallery.locator('img').nth(2)).toHaveAttribute('loading','lazy');
+  await expect(page.locator('.about-photo img')).toHaveAttribute('loading','lazy');
   await expect(gallery.locator('[data-hero-dot],[data-hero-toggle]')).toHaveCount(0);
   await page.locator('[data-hero-next]').click();
   await expect(gallery).toHaveAttribute('data-active-slide','1');

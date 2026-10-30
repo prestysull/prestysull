@@ -1,13 +1,10 @@
-import commerce from '../assets/comerciante.webp';
-import entrepreneur from '../assets/emprendedora-peruana.png';
-import worker from '../assets/trabajador-peruano.png';
+import {cmsContent} from '../lib/content.ts';
+import {cmsAssetUrl} from '../lib/cms-media.ts';
+
+const hero = cmsContent.media.hero.map((image) => ({...image, src: cmsAssetUrl(image.src)}));
 export const images = {
-  commerce,
-  commerceAlt: 'Comerciante organizando productos en su tienda',
-  hero: [
-    {src:commerce,alt:'Comerciante organizando productos en su tienda',label:'Comercio local'},
-    {src:entrepreneur,alt:'Emprendedora preparando productos en su negocio',label:'Emprendimiento'},
-    {src:worker,alt:'Trabajador revisando el inventario de su centro de trabajo',label:'Trabajo diario'},
-  ],
+  commerce: cmsAssetUrl(cmsContent.media.about.src),
+  commerceAlt: cmsContent.media.about.alt,
+  hero,
   logo: 'images/logo-original.jpeg',
 };
