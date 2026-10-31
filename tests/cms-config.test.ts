@@ -83,3 +83,15 @@ test('el administrador fija Decap CMS 3.17.3 y el proxy local está disponible',
   assert.equal(pkg.devDependencies['decap-server'], '3.11.6');
   assert.equal(pkg.devDependencies.yaml, '2.9.1');
 });
+
+test('los patrones aceptan los datos publicados y el proceso no puede reordenarse', () => {
+  const config = parse(readFileSync(new URL('config.yml', adminRoot), 'utf8'));
+  const files = config.collections[0].files;
+  const contactFields = files.find((file: {name: string}) => file.name === 'contact').fields;
+  const whatsapp = contactFields.find((field: {name: string}) => field.name === 'whatsapp');
+  assert.equal(new RegExp(whatsapp.pattern[0]).test('51945396704'), true);
+
+  const loanFields = files.find((file: {name: string}) => file.name === 'loans').fields;
+  const process = loanFields.find((field: {name: string}) => field.name === 'process');
+  assert.equal(process.allow_reorder, false);
+});

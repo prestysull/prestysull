@@ -4,6 +4,7 @@ import {test} from 'node:test';
 import {
   cmsContent,
   selectVisibleVideos,
+  type CmsContent,
   type CmsSectionName,
   validateCmsSection,
 } from '../src/lib/content.ts';
@@ -110,6 +111,10 @@ test('videos empieza desactivado y vacío, y bloquea enlaces o miniaturas insegu
   };
 
   assert.equal(validateCmsSection('videos', {...cmsContent.videos, items: [validItem]}).items.length, 1);
+  for (const thumbnail of ['', null]) {
+    const parsed: CmsContent['videos'] = validateCmsSection('videos', {...cmsContent.videos, items: [{...validItem, thumbnail}]});
+    assert.equal(parsed.items[0].thumbnail, undefined);
+  }
 
   for (const [field, value] of [
     ['url', 'http://youtube.com/watch?v=abc123'],

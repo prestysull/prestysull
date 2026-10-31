@@ -11,7 +11,7 @@
 - El sitio conserva el cálculo financiero obligatorio y sus pruebas automatizadas.
 - La compilación funciona en la raíz y con `BASE_PATH=/revision/`.
 
-Matriz ejecutada el 30 de octubre de 2026: 26/26 pruebas unitarias, 0 diagnósticos de Astro, lint limpio, build estático correcto y 23/23 pruebas Playwright aprobadas. `npm audit --omit=dev` reportó 0 vulnerabilidades de producción.
+Matriz ejecutada el 30 de octubre de 2026: 28/28 pruebas unitarias, 0 diagnósticos de Astro, lint limpio, build estático correcto y 23/23 pruebas Playwright aprobadas. `/revision/`, `/revision/admin/`, su configuración y los medios respondieron 200 en preview local. `npm audit --omit=dev` reportó 0 vulnerabilidades de producción.
 
 ## Bloqueado por configuración externa
 

@@ -14,6 +14,7 @@ const mediaPath = z.string().refine(
   (value) => /^\/uploads\/[A-Za-z0-9][A-Za-z0-9._/-]*$/.test(value) && !value.includes('..') && !value.includes('//'),
   'debe ser una ruta segura dentro de /uploads/',
 );
+const optionalMediaPath = z.preprocess((value) => value === '' || value === null ? undefined : value, mediaPath.optional());
 
 export const cmsImageSchema = z.object({
   src: mediaPath,
@@ -27,7 +28,7 @@ export const cmsVideoSchema = z.object({
   title: shortText,
   description: z.string().trim().max(600).default(''),
   url: httpsUrl,
-  thumbnail: mediaPath.optional(),
+  thumbnail: optionalMediaPath,
 }).strict();
 
 const loanCopySchema = z.object({

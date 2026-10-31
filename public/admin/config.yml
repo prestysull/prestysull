@@ -136,6 +136,7 @@ collections:
             widget: list
             min: 6
             max: 6
+            allow_reorder: false
             fields:
               - {name: title, label: Título, widget: string}
               - {name: text, label: Explicación, widget: text}
@@ -158,7 +159,7 @@ collections:
         file: src/content/cms/contact.json
         fields:
           - {name: phone, label: Teléfono visible, widget: string, pattern: ['^[0-9 +().-]{7,20}$', 'Usa solo números y separadores']}
-          - {name: whatsapp, label: WhatsApp para enlaces, widget: string, hint: 'Incluye código de país, solo números.', pattern: ['^\\d{9,15}$', 'Usa entre 9 y 15 dígitos']}
+          - {name: whatsapp, label: WhatsApp para enlaces, widget: string, hint: 'Incluye código de país, solo números.', pattern: ['^[0-9]{9,15}$', 'Usa entre 9 y 15 dígitos']}
           - {name: address, label: Dirección completa, widget: string}
           - {name: street, label: Calle y número, widget: string}
           - {name: locality, label: Localidad, widget: string}
