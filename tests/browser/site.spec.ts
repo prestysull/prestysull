@@ -193,3 +193,10 @@ test('sin JavaScript conserva navegación y evita envío del formulario',async({
 test('una dirección inexistente devuelve la página 404 personalizada',async({page})=>{
   const response=await page.goto('/esta-pagina-no-existe/');expect(response?.status()).toBe(404);await expect(page.locator('h1')).toContainText('Volvamos');
 });
+test('la administración Decap carga aislada y con configuración relativa',async({page,request})=>{
+  const response=await page.goto('/admin/');expect(response?.status()).toBe(200);
+  await expect(page).toHaveTitle('Administración Prestysull');
+  await expect(page.locator('script[src="https://cdn.jsdelivr.net/npm/decap-cms@3.17.3/dist/decap-cms.js"]')).toHaveCount(1);
+  const config=await request.get('/admin/config.yml');expect(config.status()).toBe(200);
+  expect(await config.text()).toContain('name: turbo-github');
+});

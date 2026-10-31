@@ -1,0 +1,245 @@
+locale: es
+backend:
+  name: turbo-github
+  turbo_site_id: REPLACE_WITH_TURBO_SITE_ID
+  branch: main
+local_backend: true
+media_folder: public/uploads
+public_folder: /uploads
+media_library:
+  name: default
+  config:
+    max_file_size: 2097152
+collections:
+  - name: contenido
+    label: Contenido del sitio
+    files:
+      - name: home
+        label: Página de inicio
+        file: src/content/cms/home.json
+        fields:
+          - {name: heroEyebrow, label: Etiqueta del encabezado, widget: string}
+          - {name: heroTrust, label: Mensaje de confianza, widget: string}
+          - name: loans
+            label: Sección de préstamos
+            widget: object
+            fields:
+              - {name: eyebrow, label: Etiqueta, widget: string}
+              - {name: title, label: Título, widget: string}
+              - {name: titleAccent, label: Título destacado, widget: string}
+              - {name: description, label: Descripción, widget: text}
+              - {name: footnote, label: Nota inferior, widget: text}
+          - name: process
+            label: Sección del proceso
+            widget: object
+            fields:
+              - {name: eyebrow, label: Etiqueta, widget: string}
+              - {name: title, label: Título, widget: string}
+              - {name: titleAccent, label: Título destacado, widget: string}
+              - {name: description, label: Descripción, widget: text}
+              - {name: disclaimer, label: Nota, widget: string}
+          - name: simulator
+            label: Presentación del simulador
+            widget: object
+            fields:
+              - {name: eyebrow, label: Etiqueta, widget: string}
+              - {name: title, label: Título, widget: string}
+              - {name: titleAccent, label: Título destacado, widget: string}
+              - {name: description, label: Descripción, widget: text}
+              - {name: button, label: Botón, widget: string}
+              - {name: privacy, label: Nota de privacidad, widget: string}
+          - name: about
+            label: Presentación de Prestysull
+            widget: object
+            fields:
+              - {name: eyebrow, label: Etiqueta, widget: string}
+              - {name: photoLabel, label: Etiqueta de la fotografía, widget: string}
+              - {name: link, label: Enlace, widget: string}
+          - name: faq
+            label: Presentación de preguntas frecuentes
+            widget: object
+            fields:
+              - {name: eyebrow, label: Etiqueta, widget: string}
+              - {name: title, label: Título, widget: string}
+              - {name: titleAccent, label: Título destacado, widget: string}
+              - {name: description, label: Descripción, widget: text}
+              - {name: link, label: Enlace, widget: string}
+
+      - name: company
+        label: Empresa
+        file: src/content/cms/company.json
+        fields:
+          - {name: name, label: Nombre, widget: string}
+          - {name: tagline, label: Lema, widget: string}
+          - {name: heroLines, label: Líneas del título principal, widget: list, min: 3, max: 3, field: {name: line, label: Línea, widget: string}}
+          - {name: intro, label: Introducción, widget: text}
+          - {name: about, label: Presentación institucional, widget: text}
+          - {name: localTitle, label: Título local, widget: string}
+          - name: page
+            label: Página Nosotros
+            widget: object
+            fields:
+              - {name: eyebrow, label: Etiqueta, widget: string}
+              - {name: title, label: Título, widget: string}
+              - {name: titleAccent, label: Título destacado, widget: string}
+              - {name: sectionTitle, label: Título de la sección, widget: string}
+              - {name: sectionTitleAccent, label: Título destacado de la sección, widget: string}
+              - {name: sectionDescription, label: Descripción de la sección, widget: text}
+          - name: demo
+            label: Borradores institucionales
+            widget: list
+            min: 4
+            max: 4
+            fields:
+              - {name: title, label: Título, widget: string}
+              - {name: text, label: Texto, widget: text}
+
+      - name: loans
+        label: Préstamos y proceso
+        file: src/content/cms/loans.json
+        fields:
+          - name: semanal
+            label: Préstamo semanal
+            widget: object
+            fields: &loan_fields
+              - {name: name, label: Nombre, widget: string}
+              - {name: audience, label: Público, widget: string}
+              - {name: title, label: Título, widget: string}
+              - {name: description, label: Descripción, widget: text}
+              - {name: short, label: Resumen, widget: text}
+              - {name: requirements, label: Requisitos, widget: list, min: 1, field: {name: requirement, label: Requisito, widget: string}}
+          - name: catorcenal
+            label: Préstamo catorcenal
+            widget: object
+            fields: *loan_fields
+          - name: overview
+            label: Página de modalidades
+            widget: object
+            fields:
+              - {name: eyebrow, label: Etiqueta, widget: string}
+              - {name: title, label: Título, widget: string}
+              - {name: titleAccent, label: Título destacado, widget: string}
+              - {name: description, label: Descripción, widget: text}
+              - {name: simulatorButton, label: Botón del simulador, widget: string}
+          - name: detail
+            label: Páginas de cada modalidad
+            widget: object
+            fields:
+              - {name: backLink, label: Enlace para volver, widget: string}
+              - {name: requirementsEyebrow, label: Etiqueta de requisitos, widget: string}
+              - {name: requirementsTitle, label: Título de requisitos, widget: string}
+              - {name: requirementsTitleAccent, label: Título destacado de requisitos, widget: string}
+              - {name: simulatorLink, label: Enlace al simulador, widget: string}
+              - {name: requirementsDisclaimer, label: Nota de requisitos, widget: text}
+          - name: process
+            label: Seis pasos de evaluación
+            widget: list
+            min: 6
+            max: 6
+            fields:
+              - {name: title, label: Título, widget: string}
+              - {name: text, label: Explicación, widget: text}
+
+      - name: faq
+        label: Preguntas frecuentes
+        file: src/content/cms/faq.json
+        fields:
+          - name: items
+            label: Preguntas
+            widget: list
+            required: false
+            default: []
+            fields:
+              - {name: q, label: Pregunta, widget: string}
+              - {name: a, label: Respuesta, widget: text}
+
+      - name: contact
+        label: Contacto y redes
+        file: src/content/cms/contact.json
+        fields:
+          - {name: phone, label: Teléfono visible, widget: string, pattern: ['^[0-9 +().-]{7,20}$', 'Usa solo números y separadores']}
+          - {name: whatsapp, label: WhatsApp para enlaces, widget: string, hint: 'Incluye código de país, solo números.', pattern: ['^\\d{9,15}$', 'Usa entre 9 y 15 dígitos']}
+          - {name: address, label: Dirección completa, widget: string}
+          - {name: street, label: Calle y número, widget: string}
+          - {name: locality, label: Localidad, widget: string}
+          - {name: region, label: Región, widget: string}
+          - {name: country, label: Código de país, widget: string, pattern: ['^[A-Z]{2}$', 'Usa dos letras mayúsculas']}
+          - {name: city, label: Ciudad visible, widget: string}
+          - {name: coverage, label: Cobertura, widget: string}
+          - {name: hours, label: Horario, widget: string}
+          - {name: days, label: Días de atención, widget: string}
+          - {name: facebook, label: Facebook, widget: string, pattern: ['^https://', 'Debe comenzar con https://']}
+          - {name: tiktok, label: TikTok, widget: string, pattern: ['^https://', 'Debe comenzar con https://']}
+          - {name: map, label: Google Maps, widget: string, pattern: ['^https://', 'Debe comenzar con https://']}
+          - name: page
+            label: Página de contacto
+            widget: object
+            fields:
+              - {name: eyebrow, label: Etiqueta, widget: string}
+              - {name: title, label: Título, widget: string}
+              - {name: titleAccent, label: Título destacado, widget: string}
+              - {name: intro, label: Introducción, widget: text}
+              - {name: whatsappTitle, label: Título de WhatsApp, widget: string}
+              - {name: hoursTitle, label: Título del horario, widget: string}
+              - {name: socialTitle, label: Título de redes, widget: string}
+              - {name: officeLabel, label: Etiqueta de oficina, widget: string}
+              - {name: mapsButton, label: Botón de Google Maps, widget: string}
+              - {name: mapNote, label: Nota del mapa, widget: text}
+          - name: band
+            label: Franja de contacto
+            widget: object
+            fields:
+              - {name: eyebrow, label: Etiqueta, widget: string}
+              - {name: title, label: Título, widget: string}
+              - {name: titleAccent, label: Título destacado, widget: string}
+              - {name: locationTitle, label: Título de ubicación, widget: string}
+              - {name: locationLink, label: Enlace de ubicación, widget: string}
+          - name: messages
+            label: Mensajes de WhatsApp
+            widget: object
+            fields:
+              - {name: general, label: Consulta general, widget: text}
+              - {name: semanal, label: Préstamo semanal, widget: text}
+              - {name: catorcenal, label: Préstamo catorcenal, widget: text}
+              - {name: simulador, label: Simulador, widget: text}
+
+      - name: media
+        label: Imágenes
+        file: src/content/cms/media.json
+        fields:
+          - name: hero
+            label: Tres imágenes del encabezado
+            widget: list
+            min: 3
+            max: 3
+            fields:
+              - {name: src, label: Imagen, widget: image, choose_url: false, hint: 'WebP o JPEG, máximo 2 MB y aproximadamente 1600 px de ancho.'}
+              - {name: alt, label: Descripción accesible, widget: string}
+              - {name: label, label: Etiqueta, widget: string}
+          - name: about
+            label: Imagen de Nosotros
+            widget: object
+            fields:
+              - {name: src, label: Imagen, widget: image, choose_url: false, hint: 'WebP o JPEG, máximo 2 MB y aproximadamente 1600 px de ancho.'}
+              - {name: alt, label: Descripción accesible, widget: string}
+              - {name: label, label: Etiqueta, widget: string}
+
+      - name: videos
+        label: Videos
+        file: src/content/cms/videos.json
+        fields:
+          - {name: enabled, label: Mostrar sección, widget: boolean, default: false}
+          - {name: title, label: Título, widget: string}
+          - {name: intro, label: Introducción, widget: text}
+          - name: items
+            label: Enlaces de videos
+            widget: list
+            required: false
+            default: []
+            fields:
+              - {name: visible, label: Visible, widget: boolean, default: true}
+              - {name: platform, label: Plataforma, widget: select, options: [YouTube, TikTok, Facebook, Otra]}
+              - {name: title, label: Título, widget: string}
+              - {name: description, label: Descripción, widget: text, required: false, default: ''}
+              - {name: url, label: Enlace HTTPS, widget: string, pattern: ['^https://', 'Debe comenzar con https://']}
+              - {name: thumbnail, label: Miniatura, widget: image, choose_url: false, required: false, hint: 'WebP o JPEG, máximo 2 MB.'}
