@@ -126,3 +126,6 @@
   .table-wrap td:nth-child(2),.table-wrap td:nth-child(3){white-space:nowrap}
 }
 @media(prefers-reduced-motion:reduce){.loan-card.is-scroll-active{transform:none}.loan-card.is-scroll-active .icon-tile{transform:none}.hero-slide[data-hero-stack],.round-sticker{transition:none}.round-sticker:hover,.round-sticker:active{transform:rotate(-8deg)}}
+.video-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}.video-card{min-width:0;overflow:hidden;border:1px solid var(--line);border-radius:22px;background:var(--pale);transition:transform .2s ease,box-shadow .2s ease}.video-card:hover{transform:translateY(-4px);box-shadow:0 18px 36px #102a4c18}.video-card>img{width:100%;aspect-ratio:16/9;object-fit:cover}.video-card>div{padding:24px}.video-card .eyebrow{margin-bottom:12px}.video-card h3{font-size:22px}.video-card p{margin-top:12px;color:var(--muted);font-size:13px}.video-link{display:flex;align-items:center;gap:8px;margin-top:20px;font-size:12px;font-weight:750;color:var(--blue)}
+@media(max-width:760px){.video-grid{grid-template-columns:1fr}.video-card:hover{transform:none}}
+@media(prefers-reduced-motion:reduce){.video-card{transition:none}.video-card:hover{transform:none}}

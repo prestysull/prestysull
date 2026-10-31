@@ -200,3 +200,9 @@ test('la administración Decap carga aislada y con configuración relativa',asyn
   const config=await request.get('/admin/config.yml');expect(config.status()).toBe(200);
   expect(await config.text()).toContain('name: turbo-github');
 });
+test('videos no deja sección vacía ni carga terceros cuando está desactivado',async({page})=>{
+  await page.goto('/');
+  await expect(page.locator('[data-video-section]')).toHaveCount(0);
+  const thirdParty=await page.evaluate(()=>performance.getEntriesByType('resource').map(entry=>entry.name).filter(url=>/youtube|youtu\.be|tiktok|facebook/.test(url)));
+  expect(thirdParty).toEqual([]);
+});

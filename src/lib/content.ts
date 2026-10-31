@@ -146,6 +146,10 @@ export type CmsContent = {[K in CmsSectionName]: z.infer<(typeof sectionSchemas)
 export type CmsImage = z.infer<typeof cmsImageSchema>;
 export type CmsVideo = z.infer<typeof cmsVideoSchema>;
 
+export function selectVisibleVideos(content: CmsContent['videos']): CmsVideo[] {
+  return content.enabled ? content.items.filter((item) => item.visible) : [];
+}
+
 export function validateCmsSection<K extends CmsSectionName>(name: K, value: unknown): CmsContent[K] {
   const result = sectionSchemas[name].safeParse(value);
   if (!result.success) {

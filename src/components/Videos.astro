@@ -1,0 +1,25 @@
+---
+import Icon from './Icon.astro';
+import {cmsContent, selectVisibleVideos} from '../lib/content.ts';
+import {cmsAssetUrl} from '../lib/cms-media.ts';
+
+const content = cmsContent.videos;
+const videos = selectVisibleVideos(content);
+---
+{videos.length > 0 && <section class="section container videos-section" data-video-section>
+  <div class="section-heading">
+    <div><p class="eyebrow">Videos</p><h2>{content.title}</h2></div>
+    <p>{content.intro}</p>
+  </div>
+  <div class="video-grid">
+    {videos.map((video) => <a class="video-card" href={video.url} target="_blank" rel="noopener noreferrer">
+      {video.thumbnail && <img src={cmsAssetUrl(video.thumbnail)} alt="" loading="lazy" decoding="async"/>}
+      <div>
+        <span class="eyebrow">{video.platform}</span>
+        <h3>{video.title}</h3>
+        {video.description && <p>{video.description}</p>}
+        <span class="video-link">Ver video <Icon name="up" size={18}/></span>
+      </div>
+    </a>)}
+  </div>
+</section>}

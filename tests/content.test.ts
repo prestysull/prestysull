@@ -3,6 +3,7 @@ import {readFileSync} from 'node:fs';
 import {test} from 'node:test';
 import {
   cmsContent,
+  selectVisibleVideos,
   type CmsSectionName,
   validateCmsSection,
 } from '../src/lib/content.ts';
@@ -162,4 +163,19 @@ test('días, máximos, iconos y configuración financiera no se vuelven editable
   };
   visit(cmsContent.loans);
   for (const section of ['home', 'company', 'faq', 'media', 'videos'] as const) visit(cmsContent[section]);
+});
+
+test('la sección de videos solo entrega elementos visibles cuando está activada', () => {
+  const item = {
+    visible: true,
+    platform: 'YouTube',
+    title: 'Conoce Prestysull',
+    description: 'Una historia local.',
+    url: 'https://www.youtube.com/watch?v=abc123',
+    thumbnail: '/uploads/comerciante.webp',
+  };
+  assert.deepEqual(selectVisibleVideos({...cmsContent.videos, enabled: false, items: [item]}), []);
+  assert.deepEqual(selectVisibleVideos({...cmsContent.videos, enabled: true, items: []}), []);
+  assert.deepEqual(selectVisibleVideos({...cmsContent.videos, enabled: true, items: [{...item, visible: false}]}), []);
+  assert.deepEqual(selectVisibleVideos({...cmsContent.videos, enabled: true, items: [item]}), [item]);
 });
